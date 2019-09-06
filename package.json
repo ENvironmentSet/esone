@@ -1,0 +1,28 @@
+{
+  "name": "acropolis",
+  "version": "0.0.0",
+  "description": "Acropolis, where you can experience very first version of ECMAScript.",
+  "private": true,
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build --stream",
+    "test": "lerna run test --stream"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ENvironmentSet/Acropolis.git"
+  },
+  "author": "ENvironmentSet <herryseo1@gmail.com> (https://github.com/ENvironmentSet)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ENvironmentSet/Acropolis/issues"
+  },
+  "homepage": "https://github.com/ENvironmentSet/Acropolis#readme",
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "cross-env": "^5.2.1",
+    "jest": "^24.9.0",
+    "lerna": "^3.16.4",
+    "ts-jest": "^24.0.2"
+  }
+}
