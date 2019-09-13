@@ -19,7 +19,10 @@
   },
   "homepage": "https://github.com/ENvironmentSet/Acropolis#readme",
   "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "jest": "^24.9.0",
     "lerna": "^3.16.4",
+    "ts-jest": "^24.1.0",
     "typescript": "^3.6.2"
   }
 }
