@@ -8,7 +8,7 @@ import { Literal } from '../Token';
 const startS: State = new State('start');
 const zeroS: FinalState = new FinalState('zero');
 const decimalIntegerLiteralS: FinalState = new FinalState('decimalIntegerLiteral');
-const pointS: FinalState = new FinalState('point');
+const pointS: State = new State('point');
 const decimalDigitS: FinalState = new FinalState('decimalDigit');
 const zeroP: transitionPredicate = equals('0');
 const decimalIntegerLiteralP: transitionPredicate = and(not(zeroP), digit);
