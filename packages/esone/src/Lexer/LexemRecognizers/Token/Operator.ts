@@ -1,5 +1,7 @@
 import Token from './Token';
 
-export class Operator extends Token {}
+export class Operator extends Token {
+  public readonly type: 'Operator' = 'Operator';
+}
 
 export default Operator;
