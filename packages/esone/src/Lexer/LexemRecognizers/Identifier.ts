@@ -6,11 +6,15 @@ import Token from './Token';
 import {
   ContinueRecognizer, ElseRecognizer, FnRecognizer, ForRecognizer,
   FutureReservedWordRecognizer, InRecognizer, ReturnRecognizer, ThisRecognizer,
-  WhileRecognizer, WithRecognizer
+  WhileRecognizer, WithRecognizer, BreakRecognizer, VarRecognizer, IfRecognizer
 } from './ReservedWordRecognizers';
 import {
   NullRecognizer, BooleanRecognizer
 } from './LiteralRecognizers';
+import {
+  TypeofRecognizer, NewRecognizer, DeleteRecognizer, VoidRecognizer
+} from './OperatorRecognizers';
+//@TODO: How to organize well Null/Boolean, Typeof and it's friends?
 
 const startS: State = new State('start');
 const identifierBodyS: FinalState = new FinalState('identifierBody');
@@ -25,7 +29,7 @@ const reservedWordRecognizers: AnyAutomata[] = [
   ContinueRecognizer,
   ElseRecognizer,
   FnRecognizer,
-  ForRecognizer,
+  BreakRecognizer,
   ForRecognizer,
   FutureReservedWordRecognizer,
   InRecognizer,
@@ -34,7 +38,13 @@ const reservedWordRecognizers: AnyAutomata[] = [
   WhileRecognizer,
   WithRecognizer,
   NullRecognizer,
-  BooleanRecognizer
+  BooleanRecognizer,
+  VarRecognizer,
+  IfRecognizer,
+  TypeofRecognizer,
+  NewRecognizer,
+  DeleteRecognizer,
+  VoidRecognizer
 ];
 
 export const IdentifierRecognizer: ExoticAutomata = new ExoticAutomata(string => {
