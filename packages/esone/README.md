@@ -7,3 +7,24 @@ You can find Specification of ECMAScript 1 in [here](https://www.ecma-internatio
 ## API
 
 TBD
+
+## Roadmap
+
+- [x] Build Lexer
+- [ ] Build Parser
+- [ ] Build Evaluator
+- pre-release(Nov 2, 2019)
+- [ ] Refactor Lexer
+  - [ ] Add Automata Algebra(AlgebraicAutomata)
+  - [ ] Change module structure and names of LexemeRecognizer
+  - [ ] Change structure of Token
+  - [ ] Refactor tokenizer
+- [ ] Refactor Parser
+- [ ] Refactor Evaluator
+- version 0.1.0 release(Dec 15, 2019)
+- [ ] Optimize Lexer
+- [ ] Optimize Parser
+- [ ] Add Parse tree optimizer
+- version 0.1.1 release(Dec 25, 2019)
+- [ ] Add ECMAScript core library
+- version 1.0.0 release(Jan 1, 2019)
