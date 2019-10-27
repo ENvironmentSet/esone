@@ -30,6 +30,12 @@ import {
 
 export * from './Token';
 export * from './TokenConstructorTable';
+export * from './Identifier';
+export * from './LineTerminator';
+export * from './Semicolon';
+export * from './LiteralRecognizers';
+export * from './OperatorRecognizers';
+export * from './ReservedWordRecognizers';
 
 export const StringRecognizers: AnyAutomata[] = [
   LineTerminatorRecognizer,
