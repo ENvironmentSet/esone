@@ -4,7 +4,8 @@ import { dropLeftWhile, reverse } from 'fp-ts/lib/Array';
 export const dropRightWhile: <A>(predicate: Predicate<A>) => (xs: A[]) => A[] =
   <A>(predicate: Predicate<A>): (xs: A[]) => A[] => flow(
     reverse,
-    dropLeftWhile(predicate)
+    dropLeftWhile(predicate),
+    reverse
   );
 
 export default dropRightWhile;
