@@ -2,7 +2,7 @@ import { pipe } from 'fp-ts/lib/pipeable';
 import { map, flatten, array, last, scanLeft, filterMap, filter, cons, isEmpty } from 'fp-ts/lib/Array';
 import { Option, map as fmap, option, chain, some } from 'fp-ts/lib/Option';
 import Automata, { AnyAutomata } from './Automata';
-import StringRecognizers, { automataToTokenConstructor, Token } from './LexemRecognizers';
+import StringRecognizers, { automataToTokenConstructor, Token } from './LexemeRecognizers';
 import { Predicate } from 'fp-ts/lib/function';
 import { tail, dropRightWhile } from '../utils';
 
@@ -27,7 +27,7 @@ export function tokenize(program: string): Option<Token[]> {
       flatten,
       last,
       fmap(automataToTokenConstructor),
-      fmap(Token => new Token(usedString)),
+      fmap(Token => new Token(usedString)), //@TODO Need simplification(skipping passing lexeme, constructor as normal function)
       chain(token => {
         if (unusedString.length > 0 && unusedString) { //@TODO: cleanup here
           return pipe(
