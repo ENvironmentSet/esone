@@ -13,13 +13,17 @@ TBD
 - [x] Build Lexer
 - [ ] Build Parser
 - [ ] Build Evaluator
+- Check if there is any Cyclic dependency
 - pre-release(Nov 2, 2019)
 - [ ] Refactor Lexer
+  - [ ] Minify Explicit typing 
   - [ ] Add Automata Algebra(AlgebraicAutomata)
   - [ ] Change module structure and names of LexemeRecognizer
   - [ ] Change structure of Token
-  - [ ] Refactor tokenizer
+  - [ ] Refactor `tokenize`
 - [ ] Refactor Parser
+  - [ ] Minify Explicit typing 
+  - [ ] Add Matcher Module
 - [ ] Refactor Evaluator
 - version 0.1.0 release(Dec 15, 2019)
 - [ ] Optimize Lexer
