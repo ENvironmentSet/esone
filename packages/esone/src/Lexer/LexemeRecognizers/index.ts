@@ -36,6 +36,8 @@ export * from './Semicolon';
 export * from './LiteralRecognizers';
 export * from './OperatorRecognizers';
 export * from './ReservedWordRecognizers';
+export * from './ConditionalOperatorHead';
+export * from './ConditionalOperatorBody';
 
 export const StringRecognizers: AnyAutomata[] = [
   LineTerminatorRecognizer,
