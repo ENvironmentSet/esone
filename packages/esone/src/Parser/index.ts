@@ -1,4 +1,5 @@
-export { Program, SourceElement } from './parseProgram'
+export * from './AST';
+export * from './parse';
 
 export { default } from './parse';
 
