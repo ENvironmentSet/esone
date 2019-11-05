@@ -1,6 +1,6 @@
 import tokenize from '../../Lexer';
 import parse from '../parse';
-import { isSome, chain } from 'fp-ts/lib/Option';
+import { isSome, chain, map } from 'fp-ts/lib/Option';
 
 describe('Tests for Parser', () => {
   test('Should parse well sample source', () => {
@@ -39,6 +39,7 @@ describe('Tests for Parser', () => {
     new Cons;
     `;
 
+    map(tree => console.log(JSON.stringify(tree)))(chain(parse)(tokenize(sampleSource)));
     expect(isSome(chain(parse)(tokenize(sampleSource)))).toBeTruthy();
   });
 });
