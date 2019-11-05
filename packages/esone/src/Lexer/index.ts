@@ -1,6 +1,4 @@
-import tokenize from './tokenize';
-
 export * from './LexemeRecognizers'; //@TODO: Prevent exporting TokenConstructorTable
-export { tokenize };
+export * from './tokenize';
 
-export default tokenize;
+export { default } from './tokenize';
