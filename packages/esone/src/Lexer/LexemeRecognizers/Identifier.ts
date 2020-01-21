@@ -51,7 +51,7 @@ const reservedWordRecognizers: AnyAutomata[] = [
 ].map(anyAutomata);
 
 export const IdentifierRecognizer: ExoticAutomata = new ExoticAutomata(string => {
-  return Automata.run(IdentifierNameRecognizer, string) &&//Automata.run(recognizer, string)
+  return Automata.run(IdentifierNameRecognizer, string) &&
     reservedWordRecognizers.every(not(recognizer => recognizer(curry(flip(Automata.run))(string))));
 });
 
