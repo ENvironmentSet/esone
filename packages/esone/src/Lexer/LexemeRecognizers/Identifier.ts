@@ -1,6 +1,7 @@
 import Automata, {
   ExoticAutomata, OrdinaryAutomata, FinalState,
-  State, digit, alphabet, or, transitionPredicate, oneOf, Transition, AnyAutomata
+  State, digit, alphabet, or, transitionPredicate, oneOf, Transition,
+  AnyAutomata, anyAutomata
 } from '../Automata';
 import Token from './Token';
 import {
@@ -14,7 +15,8 @@ import {
 import {
   TypeofRecognizer, NewRecognizer, DeleteRecognizer, VoidRecognizer
 } from './OperatorRecognizers';
-import { not } from 'fp-ts/lib/function';
+import { not, flip } from 'fp-ts/lib/function';
+import { curry } from '../../utils';
 //@TODO: How to organize well Null/Boolean, Typeof and it's friends?
 
 const startS: State = new State('start');
@@ -46,13 +48,13 @@ const reservedWordRecognizers: AnyAutomata[] = [
   NewRecognizer,
   DeleteRecognizer,
   VoidRecognizer
-];
+].map(anyAutomata);
 
 export const IdentifierRecognizer: ExoticAutomata = new ExoticAutomata(string => {
-  return Automata.run(IdentifierNameRecognizer, string) &&
-    reservedWordRecognizers.every(not(recognizer => Automata.run(recognizer, string)));
+  return Automata.run(IdentifierNameRecognizer, string) &&//Automata.run(recognizer, string)
+    reservedWordRecognizers.every(not(recognizer => recognizer(curry(flip(Automata.run))(string))));
 });
 
 export class Identifier extends Token {}
 
-export default [IdentifierRecognizer, Identifier] as [ExoticAutomata, typeof Identifier];
+export default [anyAutomata(IdentifierRecognizer), Identifier] as [AnyAutomata, typeof Identifier];

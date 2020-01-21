@@ -1,7 +1,5 @@
 import { Option } from 'fp-ts/lib/Option';
 import { Eq } from 'fp-ts/lib/Eq';
-import OrdinaryAutomata from './OrdinaryAutomata';
-import ExoticAutomata from './ExoticAutomata';
 
 export abstract class Automata<A> implements Eq<A> {
   public abstract transit(automata: A, char: string): Option<A>;
@@ -25,7 +23,5 @@ export abstract class Automata<A> implements Eq<A> {
     return instance.equals(instance, y);
   }
 }
-
-export type AnyAutomata = OrdinaryAutomata | ExoticAutomata //@FIXME
 
 export default Automata;

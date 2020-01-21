@@ -1,7 +1,7 @@
 import { pipe } from 'fp-ts/lib/pipeable';
 import { map, flatten, array, last, scanLeft, filterMap, filter, cons, isEmpty } from 'fp-ts/lib/Array';
 import { Option, map as fmap, option, chain, some } from 'fp-ts/lib/Option';
-import Automata, { AnyAutomata } from './Automata';
+import Automata, {anyAutomata, AnyAutomata} from './Automata';
 import StringRecognizers, { automataToTokenConstructor, Token } from './LexemeRecognizers';
 import { Predicate } from 'fp-ts/lib/function';
 import { tail, dropRightWhile } from '../utils';
@@ -9,13 +9,13 @@ import { tail, dropRightWhile } from '../utils';
 export function tokenize(program: string): Option<Token[]> {
   function stringToTokens(string: string): Option<Token[]> {
     const chars: string[] = string.split('');
-    const availableAutomatasPerChar: Automata<AnyAutomata>[][] = pipe(
+    const availableAutomatasPerChar: AnyAutomata[][] = pipe(
       chars,
-      scanLeft(StringRecognizers, <A extends Automata<A>>(prevAutomatas: A[], char: string) => pipe(
+      scanLeft(StringRecognizers, (prevAutomatas: AnyAutomata[], char: string) => pipe(
         prevAutomatas,
-        filterMap(automata => Automata.transit(automata, char))
+        filterMap(automata => automata(innerAutomata => fmap(anyAutomata)(Automata.transit(innerAutomata, char))))
       )),
-      map(filter(Automata.isOnFinalState)),
+      map(filter(innerAutomata => innerAutomata(Automata.isOnFinalState))),
       tail,
       dropRightWhile(isEmpty),
     );

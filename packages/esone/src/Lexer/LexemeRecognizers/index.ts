@@ -1,4 +1,4 @@
-import { AnyAutomata } from '../Automata';
+import { anyAutomata, AnyAutomata } from '../Automata';
 import { LineTerminatorRecognizer } from './LineTerminator';
 import { IdentifierRecognizer } from './Identifier';
 import { SemicolonRecognizer } from './Semicolon';
@@ -99,6 +99,6 @@ export const StringRecognizers: AnyAutomata[] = [
   NullRecognizer,
   NumericLiteralRecognizer,
   StringLiteralRecognizer
-];
+].map(anyAutomata);
 
 export default StringRecognizers;

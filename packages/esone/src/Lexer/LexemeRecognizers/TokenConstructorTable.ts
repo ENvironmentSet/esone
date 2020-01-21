@@ -1,5 +1,5 @@
 import Token from './Token';
-import Automata, { AnyAutomata } from '../Automata';
+import { AnyAutomata, anyAutomata } from '../Automata';
 import { lookup } from 'fp-ts/lib/Map';
 import { Some } from 'fp-ts/lib/Option';
 import AutomataToLineTerminator from './LineTerminator';
@@ -24,9 +24,9 @@ const TokenConstructorTable: TokenConstructorTable = new Map([
   ...AutomataToLiteral
 ]);
 
-export function automataToTokenConstructor<A extends Automata<A>>(automata: A): typeof Token {
-  return (lookup(Automata)(automata, TokenConstructorTable) as Some<typeof Token>).value;
-  //@FIXME: Sloppy typing caused by type AnyAutomata, should be cleaned with proper typing
+export function automataToTokenConstructor(automata: AnyAutomata): typeof Token {
+  return (lookup(anyAutomata)(automata, TokenConstructorTable) as Some<typeof Token>).value;
+  //@FIXME: should be cleaned with proper typing
   //@TODO: Replace Map with safer data structure
 }
 

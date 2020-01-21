@@ -37,7 +37,7 @@ import AutomataToUnsignedRightShift from './UnsignedRightShift';
 import AutomataToVoid from './Void';
 
 
-import { AnyAutomata } from '../../Automata';
+import { anyAutomata, AnyAutomata } from '../../Automata';
 import { Operator } from '../Token';
 
 export * from './AbstractEquality';
@@ -116,4 +116,4 @@ export default [
   AutomataToTypeof,
   AutomataToUnsignedRightShift,
   AutomataToVoid
-] as [AnyAutomata, typeof Operator][];
+].map(([automata, token]) => [anyAutomata(automata), token] as [AnyAutomata, typeof Operator]);

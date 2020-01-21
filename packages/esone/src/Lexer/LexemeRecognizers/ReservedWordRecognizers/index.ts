@@ -11,7 +11,7 @@ import AutomataToFutureReservedWord from './FutureReservedWord';
 import AutomataToVar from './Var';
 import AutomataToIf from './If';
 import AutomataToBreak from './Break';
-import { AnyAutomata } from '../../Automata';
+import { AnyAutomata, anyAutomata } from '../../Automata';
 import { ReservedWord } from '../Token';
 
 export * from './Continue';
@@ -42,4 +42,4 @@ export default [
   AutomataToVar,
   AutomataToIf,
   AutomataToBreak
-] as [AnyAutomata, typeof ReservedWord][];
+].map(([automata, token]) => [anyAutomata(automata), token] as [AnyAutomata, typeof ReservedWord]);
