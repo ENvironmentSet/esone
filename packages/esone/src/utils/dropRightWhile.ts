@@ -7,5 +7,3 @@ export const dropRightWhile: <A>(predicate: Predicate<A>) => (xs: A[]) => A[] =
     dropLeftWhile(predicate),
     reverse
   );
-
-export default dropRightWhile;
