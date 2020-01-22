@@ -5,4 +5,4 @@ export const ContinueRecognizer: OrdinaryAutomata = stringToAutomata('continue')
 
 export class Continue extends ReservedWord {}
 
-export default [ContinueRecognizer, Continue] as [OrdinaryAutomata, typeof Continue];
+export const AutomataToContinue: [OrdinaryAutomata, typeof Continue] = [ContinueRecognizer, Continue];

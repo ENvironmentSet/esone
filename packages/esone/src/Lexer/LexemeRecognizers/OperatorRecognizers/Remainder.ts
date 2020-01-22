@@ -5,4 +5,4 @@ export const RemainderRecognizer: OrdinaryAutomata = stringToAutomata('%');
 
 export class Remainder extends Operator {}
 
-export default [RemainderRecognizer, Remainder] as [OrdinaryAutomata, typeof Remainder];
+export const AutomataToRemainder: [OrdinaryAutomata, typeof Remainder] = [RemainderRecognizer, Remainder];

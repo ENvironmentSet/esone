@@ -30,4 +30,5 @@ export const NumericLiteralRecognizer: OrdinaryAutomata = DecimalLiteralRecogniz
 
 export class NumericLiteral extends Literal {}
 
-export default [NumericLiteralRecognizer, NumericLiteral] as [OrdinaryAutomata, typeof NumericLiteral];
+export const AutomataToNumericLiteral: [OrdinaryAutomata, typeof NumericLiteral] =
+  [NumericLiteralRecognizer, NumericLiteral];

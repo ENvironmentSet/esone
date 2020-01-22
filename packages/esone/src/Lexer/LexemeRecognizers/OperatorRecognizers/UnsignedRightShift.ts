@@ -5,4 +5,5 @@ export const UnsignedRightShiftRecognizer: OrdinaryAutomata = stringToAutomata('
 
 export class UnsignedRightShift extends Operator {}
 
-export default [UnsignedRightShiftRecognizer, UnsignedRightShift] as [OrdinaryAutomata, typeof UnsignedRightShift];
+export const AutomataToUnsignedRightShift: [OrdinaryAutomata, typeof UnsignedRightShift] =
+  [UnsignedRightShiftRecognizer, UnsignedRightShift];

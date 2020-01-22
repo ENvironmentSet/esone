@@ -5,4 +5,4 @@ export const DeleteRecognizer: OrdinaryAutomata = stringToAutomata('delete');
 
 export class Delete extends Operator {}
 
-export default [DeleteRecognizer, Delete] as [OrdinaryAutomata, typeof Delete];
+export const AutomataToDelete: [OrdinaryAutomata, typeof Delete] = [DeleteRecognizer, Delete];

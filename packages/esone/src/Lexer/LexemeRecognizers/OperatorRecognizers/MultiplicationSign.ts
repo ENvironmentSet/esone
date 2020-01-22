@@ -5,4 +5,5 @@ export const MultiplicationSignRecognizer: OrdinaryAutomata = stringToAutomata('
 
 export class MultiplicationSign extends Operator {}
 
-export default [MultiplicationSignRecognizer, MultiplicationSign] as [OrdinaryAutomata, typeof MultiplicationSign];
+export const AutomataToMultiplicationSign: [OrdinaryAutomata, typeof MultiplicationSign] =
+  [MultiplicationSignRecognizer, MultiplicationSign];

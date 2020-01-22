@@ -5,4 +5,4 @@ export const BitwiseNotRecognizer: OrdinaryAutomata = stringToAutomata('~');
 
 export class BitwiseNot extends Operator {}
 
-export default [BitwiseNotRecognizer, BitwiseNot] as [OrdinaryAutomata, typeof BitwiseNot];
+export const AutomataToBitwiseNot: [OrdinaryAutomata, typeof BitwiseNot] = [BitwiseNotRecognizer, BitwiseNot];

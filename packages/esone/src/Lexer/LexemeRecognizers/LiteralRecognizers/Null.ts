@@ -5,4 +5,4 @@ export const NullRecognizer: OrdinaryAutomata = stringToAutomata('null');
 
 export class Null extends Literal {}
 
-export default [NullRecognizer, Null] as [OrdinaryAutomata, typeof Null];
+export const AutomataToNull: [OrdinaryAutomata, typeof Null] = [NullRecognizer, Null];

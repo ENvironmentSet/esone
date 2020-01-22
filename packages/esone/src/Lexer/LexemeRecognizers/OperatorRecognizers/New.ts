@@ -5,4 +5,4 @@ export const NewRecognizer: OrdinaryAutomata = stringToAutomata('new');
 
 export class New extends Operator {}
 
-export default [NewRecognizer, New] as [OrdinaryAutomata, typeof New];
+export const AutomataToNew: [OrdinaryAutomata, typeof New] = [NewRecognizer, New];

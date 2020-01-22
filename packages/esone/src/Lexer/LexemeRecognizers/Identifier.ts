@@ -1,16 +1,16 @@
-import Automata, {
-  ExoticAutomata, OrdinaryAutomata, FinalState,
+import {
+  ExoticAutomata, OrdinaryAutomata, FinalState, Automata,
   State, digit, alphabet, or, transitionPredicate, oneOf, Transition,
   AnyAutomata, anyAutomata
 } from '../Automata';
-import Token from './Token';
+import { Token } from './Token';
 import {
   ContinueRecognizer, ElseRecognizer, FnRecognizer, ForRecognizer,
   FutureReservedWordRecognizer, InRecognizer, ReturnRecognizer, ThisRecognizer,
   WhileRecognizer, WithRecognizer, BreakRecognizer, VarRecognizer, IfRecognizer
 } from './ReservedWordRecognizers';
 import {
-  NullRecognizer, BooleanRecognizer
+  NullRecognizer, BoolRecognizer
 } from './LiteralRecognizers';
 import {
   TypeofRecognizer, NewRecognizer, DeleteRecognizer, VoidRecognizer
@@ -40,7 +40,7 @@ const reservedWordRecognizers: AnyAutomata[] = [
   WhileRecognizer,
   WithRecognizer,
   NullRecognizer,
-  BooleanRecognizer,
+  BoolRecognizer,
   VarRecognizer,
   IfRecognizer,
   TypeofRecognizer,
@@ -56,4 +56,5 @@ export const IdentifierRecognizer: ExoticAutomata = new ExoticAutomata(string =>
 
 export class Identifier extends Token {}
 
-export default [anyAutomata(IdentifierRecognizer), Identifier] as [AnyAutomata, typeof Identifier];
+export const AutomataToIdentifier: [AnyAutomata, typeof Identifier] =
+  [anyAutomata(IdentifierRecognizer), Identifier];

@@ -5,4 +5,4 @@ export const IncrementRecognizer: OrdinaryAutomata = stringToAutomata('++');
 
 export class Increment extends Operator {}
 
-export default [IncrementRecognizer, Increment] as [OrdinaryAutomata, typeof Increment];
+export const AutomataToIncrement: [OrdinaryAutomata, typeof Increment] = [IncrementRecognizer, Increment];

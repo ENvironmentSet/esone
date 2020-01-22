@@ -1,6 +1,6 @@
 import { Predicate } from 'fp-ts/lib/function';
 import { Option, some } from 'fp-ts/lib/Option';
-import Automata from './Automata';
+import { Automata } from './Automata';
 
 //@TODO: Optimize by refactoring this to FunctionalIterator
 //@TODO: Replace this with Automata Algebra
@@ -26,5 +26,3 @@ export class ExoticAutomata extends Automata<ExoticAutomata> {
     return x.predicate === y.predicate;
   }
 }
-
-export default ExoticAutomata;

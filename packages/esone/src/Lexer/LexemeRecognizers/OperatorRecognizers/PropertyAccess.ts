@@ -5,4 +5,5 @@ export const PropertyAccessRecognizer: OrdinaryAutomata = stringToAutomata('.');
 
 export class PropertyAccess extends Operator {}
 
-export default [PropertyAccessRecognizer, PropertyAccess] as [OrdinaryAutomata, typeof PropertyAccess];
+export const AutomataToPropertyAccess: [OrdinaryAutomata, typeof PropertyAccess] =
+  [PropertyAccessRecognizer, PropertyAccess];

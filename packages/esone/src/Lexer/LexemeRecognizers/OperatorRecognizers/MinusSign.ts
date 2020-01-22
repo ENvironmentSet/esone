@@ -5,4 +5,4 @@ export const MinusSignRecognizer: OrdinaryAutomata = stringToAutomata('-');
 
 export class MinusSign extends Operator {}
 
-export default [MinusSignRecognizer, MinusSign] as [OrdinaryAutomata, typeof MinusSign];
+export const AutomataToMinusSign: [OrdinaryAutomata, typeof MinusSign] = [MinusSignRecognizer, MinusSign];

@@ -5,4 +5,5 @@ export const AbstractEqualityRecognizer: OrdinaryAutomata = stringToAutomata('==
 
 export class AbstractEquality extends Operator {}
 
-export default [AbstractEqualityRecognizer, AbstractEquality] as [OrdinaryAutomata, typeof AbstractEquality];
+export const AutomataToAbstractEquality: [OrdinaryAutomata, typeof AbstractEquality] =
+  [AbstractEqualityRecognizer, AbstractEquality];

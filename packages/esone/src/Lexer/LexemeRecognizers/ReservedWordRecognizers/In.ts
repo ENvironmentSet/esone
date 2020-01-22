@@ -5,4 +5,4 @@ export const InRecognizer: OrdinaryAutomata = stringToAutomata('in');
 
 export class In extends ReservedWord {}
 
-export default [InRecognizer, In] as [OrdinaryAutomata, typeof In];
+export const AutomataToIn: [OrdinaryAutomata, typeof In] = [InRecognizer, In];

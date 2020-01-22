@@ -5,4 +5,5 @@ export const LeftParenthesisRecognizer: OrdinaryAutomata = stringToAutomata('(')
 
 export class LeftParenthesis extends Operator {}
 
-export default [LeftParenthesisRecognizer, LeftParenthesis] as [OrdinaryAutomata, typeof LeftParenthesis];
+export const AutomataToLeftParenthesis: [OrdinaryAutomata, typeof LeftParenthesis] =
+  [LeftParenthesisRecognizer, LeftParenthesis];

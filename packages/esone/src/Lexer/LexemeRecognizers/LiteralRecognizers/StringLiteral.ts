@@ -24,4 +24,5 @@ export const StringLiteralRecognizer: OrdinaryAutomata = new OrdinaryAutomata(st
 
 export class StringLiteral extends Literal {}
 
-export default [StringLiteralRecognizer, StringLiteral] as [OrdinaryAutomata, typeof StringLiteral];
+export const AutomataToStringLiteral: [OrdinaryAutomata, typeof StringLiteral] =
+  [StringLiteralRecognizer, StringLiteral];

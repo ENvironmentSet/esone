@@ -5,4 +5,4 @@ export const TypeofRecognizer: OrdinaryAutomata = stringToAutomata('typeof');
 
 export class Typeof extends Operator {}
 
-export default [TypeofRecognizer, Typeof] as [OrdinaryAutomata, typeof Typeof];
+export const AutomataToTypeof: [OrdinaryAutomata, typeof Typeof] = [TypeofRecognizer, Typeof];

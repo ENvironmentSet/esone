@@ -5,4 +5,4 @@ export const BitwiseAndRecognizer: OrdinaryAutomata = stringToAutomata('&');
 
 export class BitwiseAnd extends Operator {}
 
-export default [BitwiseAndRecognizer, BitwiseAnd] as [OrdinaryAutomata, typeof BitwiseAnd];
+export const AutomataToBitwiseAnd: [OrdinaryAutomata, typeof BitwiseAnd] = [BitwiseAndRecognizer, BitwiseAnd];

@@ -5,4 +5,4 @@ export const WhileRecognizer: OrdinaryAutomata = stringToAutomata('while');
 
 export class While extends ReservedWord {}
 
-export default [WhileRecognizer, While] as [OrdinaryAutomata, typeof While];
+export const AutomataToWhile: [OrdinaryAutomata, typeof While] = [WhileRecognizer, While];

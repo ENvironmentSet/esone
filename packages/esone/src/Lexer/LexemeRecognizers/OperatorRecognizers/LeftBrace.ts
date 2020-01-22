@@ -5,4 +5,4 @@ export const LeftBraceRecognizer: OrdinaryAutomata = stringToAutomata('{');
 
 export class LeftBrace extends Operator {}
 
-export default [LeftBraceRecognizer, LeftBrace] as [OrdinaryAutomata, typeof LeftBrace];
+export const AutomataToLeftBrace: [OrdinaryAutomata, typeof LeftBrace] = [LeftBraceRecognizer, LeftBrace];

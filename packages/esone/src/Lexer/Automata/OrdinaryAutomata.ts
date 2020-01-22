@@ -5,10 +5,10 @@ import { pipe } from 'fp-ts/lib/pipeable';
 import { getMonoid as getMonoidOfMap, lookup, singleton } from 'fp-ts/lib/Map';
 import { Monoid } from 'fp-ts/lib/Monoid';
 import { foldM } from 'fp-ts/lib/Foldable';
-import Automata from './Automata';
-import State from './State';
-import FinalState from './FinalState';
-import Transition from './Transition';
+import { Automata } from './Automata';
+import { State } from './State';
+import { FinalState } from './FinalState';
+import { Transition } from './Transition';
 
 //@TODO: Add compile time automata validation through type
 //@TODO: Optimize with Lazy evaluation & DP
@@ -56,5 +56,3 @@ export class OrdinaryAutomata extends Automata<OrdinaryAutomata> {
     return x.transitions === y.transitions;
   }
 }
-
-export default OrdinaryAutomata;

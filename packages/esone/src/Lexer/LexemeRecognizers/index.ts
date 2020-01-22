@@ -22,7 +22,7 @@ import {
   VoidRecognizer
 } from './OperatorRecognizers';
 import {
-  BooleanRecognizer,
+  BoolRecognizer,
   NullRecognizer,
   NumericLiteralRecognizer,
   StringLiteralRecognizer
@@ -95,10 +95,8 @@ export const StringRecognizers: AnyAutomata[] = [
   TypeofRecognizer,
   UnsignedRightShiftRecognizer,
   VoidRecognizer,
-  BooleanRecognizer,
+  BoolRecognizer,
   NullRecognizer,
   NumericLiteralRecognizer,
   StringLiteralRecognizer
 ].map(anyAutomata);
-
-export default StringRecognizers;

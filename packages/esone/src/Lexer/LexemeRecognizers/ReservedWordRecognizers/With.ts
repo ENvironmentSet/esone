@@ -5,4 +5,5 @@ export const WithRecognizer: OrdinaryAutomata = stringToAutomata('with');
 
 export class With extends ReservedWord {}
 
-export default [WithRecognizer, With] as [OrdinaryAutomata, typeof With];
+export const AutomataToWith: [OrdinaryAutomata, typeof With] =
+  [WithRecognizer, With];

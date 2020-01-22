@@ -5,4 +5,5 @@ export const RightBracketRecognizer: OrdinaryAutomata = stringToAutomata(']');
 
 export class RightBracket extends Operator {}
 
-export default [RightBracketRecognizer, RightBracket] as [OrdinaryAutomata, typeof RightBracket];
+export const AutomataToRightBracket: [OrdinaryAutomata, typeof RightBracket] =
+  [RightBracketRecognizer, RightBracket];

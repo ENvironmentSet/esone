@@ -5,4 +5,4 @@ export const BitwiseXorRecognizer: OrdinaryAutomata = stringToAutomata('^');
 
 export class BitwiseXor extends Operator {}
 
-export default [BitwiseXorRecognizer, BitwiseXor] as [OrdinaryAutomata, typeof BitwiseXor];
+export const AutomataToBitwiseXor: [OrdinaryAutomata, typeof BitwiseXor] = [BitwiseXorRecognizer, BitwiseXor];

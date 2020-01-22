@@ -5,4 +5,4 @@ export const LeftShiftRecognizer: OrdinaryAutomata = stringToAutomata('<<');
 
 export class LeftShift extends Operator {}
 
-export default [LeftShiftRecognizer, LeftShift] as [OrdinaryAutomata, typeof LeftShift];
+export const AutomataToLeftShift: [OrdinaryAutomata, typeof LeftShift] = [LeftShiftRecognizer, LeftShift];

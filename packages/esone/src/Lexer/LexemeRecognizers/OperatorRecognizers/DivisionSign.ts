@@ -5,4 +5,5 @@ export const DivisionSignRecognizer: OrdinaryAutomata = stringToAutomata('/');
 
 export class DivisionSign extends Operator {}
 
-export default [DivisionSignRecognizer, DivisionSign] as [OrdinaryAutomata, typeof DivisionSign];
+export const AutomataToDivisionSign: [OrdinaryAutomata, typeof DivisionSign] =
+  [DivisionSignRecognizer, DivisionSign];

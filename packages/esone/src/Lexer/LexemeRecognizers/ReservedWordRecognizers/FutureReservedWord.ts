@@ -1,4 +1,4 @@
-import Automata, { OrdinaryAutomata, stringToAutomata, ExoticAutomata } from '../../Automata';
+import{ Automata, OrdinaryAutomata, stringToAutomata, ExoticAutomata } from '../../Automata';
 import { ReservedWord } from '../Token';
 
 const CaseRecognizer: OrdinaryAutomata = stringToAutomata('case');
@@ -43,4 +43,5 @@ export const FutureReservedWordRecognizer: ExoticAutomata = new ExoticAutomata(
 
 export class FutureReservedWord extends ReservedWord {}
 
-export default [FutureReservedWordRecognizer, FutureReservedWord] as [ExoticAutomata, typeof FutureReservedWord];
+export const AutomataToFutureReservedWord: [ExoticAutomata, typeof FutureReservedWord] =
+  [FutureReservedWordRecognizer, FutureReservedWord];

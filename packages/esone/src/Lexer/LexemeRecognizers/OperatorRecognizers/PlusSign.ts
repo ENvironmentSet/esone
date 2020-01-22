@@ -5,4 +5,4 @@ export const PlusSignRecognizer: OrdinaryAutomata = stringToAutomata('+');
 
 export class PlusSign extends Operator {}
 
-export default [PlusSignRecognizer, PlusSign] as [OrdinaryAutomata, typeof PlusSign];
+export const AutomataToPlusSign: [OrdinaryAutomata, typeof PlusSign] = [PlusSignRecognizer, PlusSign];

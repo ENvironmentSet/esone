@@ -5,4 +5,4 @@ export const VarRecognizer: OrdinaryAutomata = stringToAutomata('var');
 
 export class Var extends ReservedWord {}
 
-export default [VarRecognizer, Var] as [OrdinaryAutomata, typeof Var];
+export const AutomataToVar: [OrdinaryAutomata, typeof Var] = [VarRecognizer, Var];

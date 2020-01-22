@@ -5,4 +5,4 @@ export const ThisRecognizer: OrdinaryAutomata = stringToAutomata('this');
 
 export class This extends ReservedWord {}
 
-export default [ThisRecognizer, This] as [OrdinaryAutomata, typeof This];
+export const AutomataToThis: [OrdinaryAutomata, typeof This] = [ThisRecognizer, This];

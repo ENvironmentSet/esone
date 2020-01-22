@@ -5,4 +5,4 @@ export const ElseRecognizer: OrdinaryAutomata = stringToAutomata('else');
 
 export class Else extends ReservedWord {}
 
-export default [ElseRecognizer, Else] as [OrdinaryAutomata, typeof Else];
+export const AutomataToElse: [OrdinaryAutomata, typeof Else] = [ElseRecognizer, Else];

@@ -5,4 +5,4 @@ export const LogicalNotRecognizer: OrdinaryAutomata = stringToAutomata('!');
 
 export class LogicalNot extends Operator {}
 
-export default [LogicalNotRecognizer, LogicalNot] as [OrdinaryAutomata, typeof LogicalNot];
+export const AutomataToLogicalNot: [OrdinaryAutomata, typeof LogicalNot] = [LogicalNotRecognizer, LogicalNot];

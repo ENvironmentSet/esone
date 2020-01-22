@@ -5,4 +5,4 @@ export const EqualSignRecognizer: OrdinaryAutomata = stringToAutomata('=');
 
 export class EqualSign extends Operator {}
 
-export default [EqualSignRecognizer, EqualSign] as [OrdinaryAutomata, typeof EqualSign];
+export const AutomataToEqualSign: [OrdinaryAutomata, typeof EqualSign] = [EqualSignRecognizer, EqualSign];

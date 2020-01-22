@@ -5,4 +5,4 @@ export const IfRecognizer: OrdinaryAutomata = stringToAutomata('if');
 
 export class If extends ReservedWord {}
 
-export default [IfRecognizer, If] as [OrdinaryAutomata, typeof If];
+export const AutomataToIf: [OrdinaryAutomata, typeof If] = [IfRecognizer, If];

@@ -5,4 +5,4 @@ export const BreakRecognizer: OrdinaryAutomata = stringToAutomata('break');
 
 export class Break extends ReservedWord {}
 
-export default [BreakRecognizer, Break] as [OrdinaryAutomata, typeof Break];
+export const AutomataToBreak: [OrdinaryAutomata, typeof Break] = [BreakRecognizer, Break];

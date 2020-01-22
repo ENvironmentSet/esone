@@ -1,16 +1,16 @@
-import AutomataToContinue from './Continue';
-import AutomataToElse from './Else';
-import AutomataToFn from './Fn';
-import AutomataToFor from './For';
-import AutomataToIn from './In';
-import AutomataToReturn from './Return';
-import AutomataToThis from './This';
-import AutomataToWhile from './While';
-import AutomataToWith from './With';
-import AutomataToFutureReservedWord from './FutureReservedWord';
-import AutomataToVar from './Var';
-import AutomataToIf from './If';
-import AutomataToBreak from './Break';
+import { AutomataToContinue } from './Continue';
+import { AutomataToElse } from './Else';
+import { AutomataToFn } from './Fn';
+import { AutomataToFor } from './For';
+import { AutomataToIn } from './In';
+import { AutomataToReturn } from './Return';
+import { AutomataToThis } from './This';
+import { AutomataToWhile } from './While';
+import { AutomataToWith } from './With';
+import { AutomataToFutureReservedWord } from './FutureReservedWord';
+import { AutomataToVar } from './Var';
+import { AutomataToIf } from './If';
+import { AutomataToBreak } from './Break';
 import { AnyAutomata, anyAutomata } from '../../Automata';
 import { ReservedWord } from '../Token';
 
@@ -28,7 +28,7 @@ export * from './Var';
 export * from './If';
 export * from './Break';
 
-export default [
+export const AutomataToReservedWord: [AnyAutomata, typeof ReservedWord][] = [
   AutomataToContinue,
   AutomataToElse,
   AutomataToFn,
@@ -42,4 +42,4 @@ export default [
   AutomataToVar,
   AutomataToIf,
   AutomataToBreak
-].map(([automata, token]) => [anyAutomata(automata), token] as [AnyAutomata, typeof ReservedWord]);
+].map(([automata, token]) => [anyAutomata(automata), token]);

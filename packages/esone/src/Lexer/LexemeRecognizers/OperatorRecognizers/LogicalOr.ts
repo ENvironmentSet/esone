@@ -5,4 +5,4 @@ export const LogicalOrRecognizer: OrdinaryAutomata = stringToAutomata('||');
 
 export class LogicalOr extends Operator {}
 
-export default [LogicalOrRecognizer, LogicalOr] as [OrdinaryAutomata, typeof LogicalOr];
+export const AutomataToLogicalOr: [OrdinaryAutomata, typeof LogicalOr] = [LogicalOrRecognizer, LogicalOr];

@@ -5,4 +5,5 @@ export const StrictLessThanRecognizer: OrdinaryAutomata = stringToAutomata('<');
 
 export class StrictLessThan extends Operator {}
 
-export default [StrictLessThanRecognizer, StrictLessThan] as [OrdinaryAutomata, typeof StrictLessThan];
+export const AutomataToStrictLessThan: [OrdinaryAutomata, typeof StrictLessThan] =
+  [StrictLessThanRecognizer, StrictLessThan];

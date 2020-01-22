@@ -5,4 +5,4 @@ export const VoidRecognizer: OrdinaryAutomata = stringToAutomata('void');
 
 export class Void extends Operator {}
 
-export default [VoidRecognizer, Void] as [OrdinaryAutomata, typeof Void];
+export const AutomataToVoid: [OrdinaryAutomata, typeof Void] = [VoidRecognizer, Void];

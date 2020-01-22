@@ -5,4 +5,4 @@ export const GreaterThanRecognizer: OrdinaryAutomata = stringToAutomata('>=');
 
 export class GreaterThan extends Operator {}
 
-export default [GreaterThanRecognizer, GreaterThan] as [OrdinaryAutomata, typeof GreaterThan];
+export const AutomataToGreaterThan: [OrdinaryAutomata, typeof GreaterThan] = [GreaterThanRecognizer, GreaterThan];

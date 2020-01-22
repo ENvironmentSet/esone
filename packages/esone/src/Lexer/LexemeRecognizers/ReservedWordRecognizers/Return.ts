@@ -5,4 +5,4 @@ export const ReturnRecognizer: OrdinaryAutomata = stringToAutomata('return');
 
 export class Return extends ReservedWord {}
 
-export default [ReturnRecognizer, Return] as [OrdinaryAutomata, typeof Return];
+export const AutomataToReturn: [OrdinaryAutomata, typeof Return] = [ReturnRecognizer, Return];

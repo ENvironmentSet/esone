@@ -23,5 +23,3 @@ export abstract class Automata<A> implements Eq<A> {
     return instance.equals(instance, y);
   }
 }
-
-export default Automata;

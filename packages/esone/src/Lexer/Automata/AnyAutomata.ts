@@ -1,4 +1,4 @@
-import Automata from './Automata';
+import { Automata } from './Automata';
 import { Eq } from 'fp-ts/lib/Eq';
 import { unsafeCoerce } from 'fp-ts/lib/function';
 
@@ -22,5 +22,3 @@ const anyAutomataInstanceDictionary: Eq<AnyAutomata> = {
 };
 
 export const anyAutomata = Object.assign(anyAutomataConstructor, anyAutomataInstanceDictionary);
-
-export default AnyAutomata;

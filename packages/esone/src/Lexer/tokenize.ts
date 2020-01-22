@@ -1,8 +1,8 @@
 import { pipe } from 'fp-ts/lib/pipeable';
 import { map, flatten, array, last, scanLeft, filterMap, filter, cons, isEmpty } from 'fp-ts/lib/Array';
 import { Option, map as fmap, option, chain, some } from 'fp-ts/lib/Option';
-import Automata, {anyAutomata, AnyAutomata} from './Automata';
-import StringRecognizers, { automataToTokenConstructor, Token } from './LexemeRecognizers';
+import { Automata, anyAutomata, AnyAutomata } from './Automata';
+import { StringRecognizers, automataToTokenConstructor, Token } from './LexemeRecognizers';
 import { Predicate } from 'fp-ts/lib/function';
 import { tail, dropRightWhile } from '../utils';
 
@@ -51,5 +51,3 @@ export function tokenize(program: string): Option<Token[]> {
     fmap(flatten),
   );
 }
-
-export default tokenize;

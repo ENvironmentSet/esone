@@ -3,5 +3,3 @@ export class Token {
 
   constructor(public lexeme: string) {}
 } //@TODO: Let distinguish token by as enum token type and token.type be list of token type.
-
-export default Token;

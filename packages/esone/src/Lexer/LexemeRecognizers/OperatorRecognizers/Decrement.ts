@@ -5,4 +5,4 @@ export const DecrementRecognizer: OrdinaryAutomata = stringToAutomata('--');
 
 export class Decrement extends Operator {}
 
-export default [DecrementRecognizer, Decrement] as [OrdinaryAutomata, typeof Decrement];
+export const AutomataToDecrement: [OrdinaryAutomata, typeof Decrement] = [DecrementRecognizer, Decrement];

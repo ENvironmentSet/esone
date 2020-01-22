@@ -1,7 +1,7 @@
-import OrdinaryAutomata from './OrdinaryAutomata';
-import State from './State';
-import FinalState from './FinalState';
-import Transition from './Transition';
+import { OrdinaryAutomata } from './OrdinaryAutomata';
+import { State } from './State';
+import { FinalState } from './FinalState';
+import { Transition } from './Transition';
 import { equals } from './transitionPredicateConstructors';
 import { pipe } from 'fp-ts/lib/pipeable';
 import { map, zip, zipWith } from 'fp-ts/lib/Array';
@@ -23,7 +23,3 @@ export function stringToAutomata(string: string): OrdinaryAutomata {
 
   return new OrdinaryAutomata(startS, transitions);
 }
-
-export default {
-  stringToAutomata
-};

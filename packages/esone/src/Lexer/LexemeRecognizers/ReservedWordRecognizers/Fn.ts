@@ -5,4 +5,4 @@ export const FnRecognizer: OrdinaryAutomata = stringToAutomata('function');
 
 export class Fn extends ReservedWord {}
 
-export default [FnRecognizer, Fn] as [OrdinaryAutomata, typeof Fn];
+export const AutomataToFn: [OrdinaryAutomata, typeof Fn] = [FnRecognizer, Fn];

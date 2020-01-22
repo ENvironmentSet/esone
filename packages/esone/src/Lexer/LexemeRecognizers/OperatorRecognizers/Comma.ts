@@ -5,4 +5,4 @@ export const CommaRecognizer: OrdinaryAutomata = stringToAutomata(',');
 
 export class Comma extends Operator {}
 
-export default [CommaRecognizer, Comma] as [OrdinaryAutomata, typeof Comma];
+export const AutomataToComma: [OrdinaryAutomata, typeof Comma]= [CommaRecognizer, Comma];

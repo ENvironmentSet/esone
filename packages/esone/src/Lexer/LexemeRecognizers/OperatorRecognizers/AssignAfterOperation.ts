@@ -19,4 +19,5 @@ export const AssignAfterOperationRecognizer: OrdinaryAutomata = new OrdinaryAuto
 
 export class AssignAfterOperation extends Operator {}
 
-export default [AssignAfterOperationRecognizer, AssignAfterOperation] as [OrdinaryAutomata, typeof AssignAfterOperation];
+export const AutomataToAssignAfterOperation: [OrdinaryAutomata, typeof AssignAfterOperation] =
+  [AssignAfterOperationRecognizer, AssignAfterOperation];
