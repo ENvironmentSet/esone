@@ -1,12 +1,12 @@
-import { BooleanLiteral, booleanLiteral } from '../../../AST';
+import { BoolLiteral, boolLiteral } from '../../../AST';
 import { Bool } from '../../../../Lexer';
 import Parser from '../../../Parser';
 import { tokenState } from '../../../TokenState';
 import matchTokenFromLeft from '../../../matchTokenFromLeft';
 
-export const parseBooleanLiteral: Parser<BooleanLiteral> = tokenState.map(
+export const parseBoolLiteral: Parser<BoolLiteral> = tokenState.map(
   matchTokenFromLeft(Bool),
-  booleanLiteral
+  boolLiteral
 );
 
-export default parseBooleanLiteral;
+export default parseBoolLiteral;
