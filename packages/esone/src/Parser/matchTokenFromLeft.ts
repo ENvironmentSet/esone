@@ -4,7 +4,7 @@ import { chain, map, fromPredicate } from 'fp-ts/lib/Option';
 import TokenState, { tokenState } from './TokenState';
 import { Option } from 'fp-ts/lib/Option';
 import { pipe } from 'fp-ts/lib/pipeable';
-import { tail } from '../utils';
+import { tail } from '../utils/Array';
 import { constant } from 'fp-ts/lib/function';
 
 export function matchTokenFromLeft<A extends typeof Token>(target: A): TokenState<InstanceType<A>> {
