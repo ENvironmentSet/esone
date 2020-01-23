@@ -2,6 +2,7 @@ import { anyAutomata, AnyAutomata } from '../Automata';
 import { LineTerminatorRecognizer } from './LineTerminator';
 import { IdentifierRecognizer } from './Identifier';
 import { SemicolonRecognizer } from './Semicolon';
+import { SpaceRecognizer } from './Space';
 import { ConditionalOperatorHeadRecognizer } from './ConditionalOperatorHead';
 import { ConditionalOperatorBodyRecognizer } from './ConditionalOperatorBody';
 import {
@@ -38,6 +39,7 @@ export * from './OperatorRecognizers';
 export * from './ReservedWordRecognizers';
 export * from './ConditionalOperatorHead';
 export * from './ConditionalOperatorBody';
+export * from './Space';
 
 export const StringRecognizers: AnyAutomata[] = [
   LineTerminatorRecognizer,
@@ -98,5 +100,6 @@ export const StringRecognizers: AnyAutomata[] = [
   BoolRecognizer,
   NullRecognizer,
   NumericLiteralRecognizer,
-  StringLiteralRecognizer
+  StringLiteralRecognizer,
+  SpaceRecognizer
 ].map(anyAutomata);

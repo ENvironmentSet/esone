@@ -1,0 +1,1 @@
+export { flow as map } from 'fp-ts/lib/function';

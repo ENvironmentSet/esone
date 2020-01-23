@@ -10,6 +10,7 @@ import { AutomataToConditionalOperatorBody } from './ConditionalOperatorBody';
 import { AutomataToReservedWord } from './ReservedWordRecognizers';
 import { AutomataToOperator } from './OperatorRecognizers';
 import { AutomataToLiteral } from './LiteralRecognizers';
+import { AutomataToSpace } from './Space';
 
 type TokenConstructorTable = Map<AnyAutomata, typeof Token>;
 
@@ -19,6 +20,7 @@ const TokenConstructorTable: TokenConstructorTable = new Map([
   AutomataToSemicolon,
   AutomataToConditionalOperatorHead,
   AutomataToConditionalOperatorBody,
+  AutomataToSpace,
   ...AutomataToReservedWord,
   ...AutomataToOperator,
   ...AutomataToLiteral
