@@ -10,10 +10,10 @@ import { chain as bind, of } from '../utils/Func';
 
 const { concat } = getMonoidOfOption(getMonoid<Token>());
 
-export const tokenize: (source: string) => Option<Token[]> = flow(
+export const tokenize: (source: string) => Option<Token[]> = bind(
   stringToChars,
-  source => pipe(
-    source,
+  chars => source => pipe(
+    chars,
     scanLeft(StringRecognizers, (prevAutomatas: AnyAutomata[], char: string) => pipe(
       prevAutomatas,
       filterMap(automata => automata(innerAutomata => fmap(anyAutomata)(Automata.transit(innerAutomata, char))))
@@ -26,7 +26,7 @@ export const tokenize: (source: string) => Option<Token[]> = flow(
         last,
       ),
       longestMatch => bind(
-        automataMatrix => [source.join('').slice(0, automataMatrix.length - 1), source.join('').slice(automataMatrix.length - 1)],
+        automataMatrix => [source.slice(0, automataMatrix.length - 1), source.slice(automataMatrix.length - 1)],
         ([usedString, unusedString]) => of(
           chain(flow(
             automataToTokenConstructor,
