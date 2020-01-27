@@ -7,8 +7,8 @@ import { ConditionalOperatorHeadRecognizer } from './ConditionalOperatorHead';
 import { ConditionalOperatorBodyRecognizer } from './ConditionalOperatorBody';
 import {
   ContinueRecognizer, ElseRecognizer, FnRecognizer, ForRecognizer,
-  FutureReservedWordRecognizer, InRecognizer, ReturnRecognizer, ThisRecognizer,
-  WhileRecognizer, WithRecognizer, VarRecognizer, IfRecognizer, BreakRecognizer
+  InRecognizer, ReturnRecognizer, ThisRecognizer, WhileRecognizer,
+  WithRecognizer, VarRecognizer, IfRecognizer, BreakRecognizer
 } from './ReservedWordRecognizers';
 import {
   AbstractEqualityRecognizer, AssignAfterOperationRecognizer, BitwiseAndRecognizer, BitwiseNotRecognizer,
@@ -51,7 +51,6 @@ export const StringRecognizers: AnyAutomata[] = [
   ElseRecognizer,
   FnRecognizer,
   ForRecognizer,
-  FutureReservedWordRecognizer,
   InRecognizer,
   ReturnRecognizer,
   ThisRecognizer,
