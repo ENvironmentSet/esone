@@ -8,7 +8,7 @@ function anyAutomataConstructor<A extends Automata<A>>(automata: A): AnyAutomata
   return eliminator => eliminator(automata);
 }
 
-export function equals(x: AnyAutomata, y: AnyAutomata): boolean {
+function equals(x: AnyAutomata, y: AnyAutomata): boolean {
   return x(innerX =>
     y(innerY => {
       //@FIXME: even this coercion is safe, we need natural solution
