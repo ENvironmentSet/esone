@@ -1,1 +1,1 @@
-export * from './stringToChars';
+export * from './stringToCharList';
