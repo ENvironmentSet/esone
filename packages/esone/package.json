@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/ENvironmentSet/esone#readme",
   "dependencies": {
-    "fp-ts": "^2.0.5",
+    "fp-ts": "^2.8.2",
     "monocle-ts": "^2.3.3"
   }
 }
