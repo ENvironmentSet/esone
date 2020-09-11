@@ -9,7 +9,7 @@ import { flow, Predicate, constant } from 'fp-ts/lib/function';
 import { chain as mergeBranchedPipe, func } from '../utils/Func';
 import { getOptionM } from 'fp-ts/lib/OptionT';
 
-const { chain: mergeBranchedOptionPipe } = getOptionM(func);
+const { chain: mergeBranchedOptionalPipe } = getOptionM(func);
 
 const If: <A, R>(cond: Predicate<A>, onTrue: (a: A) => R, onFalse: () => R) => (a: A) => R =
   (cond, onTrue, onFalse) => a => cond(a) ? onTrue(a) : onFalse();
@@ -20,7 +20,7 @@ const scanLeftAndExcludeInitialState: typeof scanLeft = (init, reducer) => flow(
 );
 
 //@TODO refactor getNextToken
-const getNextToken: (source: string) => Option<Token> = mergeBranchedOptionPipe(
+const getNextToken: (source: string) => Option<Token> = mergeBranchedOptionalPipe(
   flow(
     stringToCharList,
     scanLeftAndExcludeInitialState(StringRecognizers, (prevAutomatas: AnyAutomata[], char: string) => pipe(
@@ -47,7 +47,7 @@ const getUnmatchedString: (matchedString: string) => (source: string) => string 
 
 export const tokenize: (source: string) => Option<Token[]> = If(
   source => source.length > 0,
-  mergeBranchedOptionPipe(
+  mergeBranchedOptionalPipe(
     getNextToken,
     token => flow(
       getUnmatchedString(token.lexeme),
