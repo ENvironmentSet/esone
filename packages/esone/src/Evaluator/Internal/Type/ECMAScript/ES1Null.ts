@@ -8,8 +8,8 @@ export class ES1Null<Representation> extends ES1Type<Representation> {
   }
 }
 
-export type AnyES1Null = <Result>(f: <R, T extends ES1Null<R>>(x: ES1Value<R, T>) => Result) => Result
-export function anyES1Null<R, T extends ES1Null<R>>(x: ES1Value<R, T>): AnyES1Null {
+export type AnyES1Null = <Result>(f: <R>(x: ES1Value<R, ES1Null<R>>) => Result) => Result
+export function anyES1Null<R>(x: ES1Value<R, ES1Null<R>>): AnyES1Null {
   return f => f(x);
 }
 

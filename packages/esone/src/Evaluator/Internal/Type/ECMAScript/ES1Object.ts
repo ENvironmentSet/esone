@@ -12,8 +12,8 @@ export class ES1Object<Representation> extends ES1Type<Representation> {
   }
 }
 
-export type AnyES1Object = <Result>(f: <R, T extends ES1Object<R>>(x: ES1Value<R, T>) => Result) => Result
-export function anyES1Object<R, T extends ES1Object<R>>(x: ES1Value<R, T>): AnyES1Object {
+export type AnyES1Object = <Result>(f: <R>(x: ES1Value<R, ES1Object<R>>) => Result) => Result
+export function anyES1Object<R>(x: ES1Value<R, ES1Object<R>>): AnyES1Object {
   return f => f(x);
 }
 

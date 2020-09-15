@@ -7,8 +7,8 @@ export class ES1Number<Representation> extends ES1Type<Representation> {
   }
 }
 
-export type AnyES1Number = <Result>(f: <R, T extends ES1Number<R>>(x: ES1Value<R, T>) => Result) => Result
-export function anyES1Number<R, T extends ES1Number<R>>(x: ES1Value<R, T>): AnyES1Number {
+export type AnyES1Number = <Result>(f: <R>(x: ES1Value<R, ES1Number<R>>) => Result) => Result
+export function anyES1Number<R>(x: ES1Value<R, ES1Number<R>>): AnyES1Number {
   return f => f(x);
 }
 

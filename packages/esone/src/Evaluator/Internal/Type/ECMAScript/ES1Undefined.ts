@@ -8,8 +8,8 @@ export class ES1Undefined<Representation> extends ES1Type<Representation> {
   }
 }
 
-export type AnyES1Undefined = <Result>(f: <R, T extends ES1Undefined<R>>(x: ES1Value<R, T>) => Result) => Result
-export function anyES1Undefined<R, T extends ES1Undefined<R>>(x: ES1Value<R, T>): AnyES1Undefined {
+export type AnyES1Undefined = <Result>(f: <R>(x: ES1Value<R, ES1Undefined<R>>) => Result) => Result
+export function anyES1Undefined<R>(x: ES1Value<R, ES1Undefined<R>>): AnyES1Undefined {
   return f => f(x);
 }
 

@@ -8,8 +8,8 @@ export class ES1String<Representation> extends ES1Type<Representation> {
   }
 }
 
-export type AnyES1String = <Result>(f: <R, T extends ES1String<R>>(x: ES1Value<R, T>) => Result) => Result
-export function anyES1String<R, T extends ES1String<R>>(x: ES1Value<R, T>): AnyES1String {
+export type AnyES1String = <Result>(f: <R>(x: ES1Value<R, ES1String<R>>) => Result) => Result
+export function anyES1String<R>(x: ES1Value<R, ES1String<R>>): AnyES1String {
   return f => f(x);
 }
 
