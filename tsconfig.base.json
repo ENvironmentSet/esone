@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "lib": ["es2018"],
+    "lib": ["esnext"],
     "module": "es6",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "removeComments": true,
     "strict": true,
-    "target": "es6",
+    "target": "esnext",
     "sourceMap": true
   }
 }
