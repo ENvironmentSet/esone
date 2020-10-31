@@ -7,15 +7,15 @@ import { chain } from '../../utils/Func';
 
 export type ES1ObjectReference = number;
 
-export class Environment {
+export class Context {
   constructor(
     public objectPool: Map<ES1ObjectReference, ES1ObjectRepresentation> = new Map(), //@TODO: Replace with WeakMap
     public objectIdentifierBoundary: ES1ObjectReference = objectPool.size,
   ) {}
 
-  static createObject(objectDescriptor: ES1ObjectRepresentation): (environment: Environment) => [ES1ObjectReference, Environment] {
-    const objectPool = Lens.fromProp<Environment>()('objectPool');
-    const { get: getObjectIdentifierBoundary, set: setObjectIdentifierBoundary } = Lens.fromProp<Environment>()('objectIdentifierBoundary');
+  static createObject(objectDescriptor: ES1ObjectRepresentation): (environment: Context) => [ES1ObjectReference, Context] {
+    const objectPool = Lens.fromProp<Context>()('objectPool');
+    const { get: getObjectIdentifierBoundary, set: setObjectIdentifierBoundary } = Lens.fromProp<Context>()('objectIdentifierBoundary');
 
     return chain( //@TODO Refactor with fp-ts-contrib's Do
       getObjectIdentifierBoundary,

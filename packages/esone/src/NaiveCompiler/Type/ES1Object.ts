@@ -1,5 +1,5 @@
 import { ES1Value } from './ES1Value';
-import { Environment, ES1ObjectReference } from '../Program/Environment';
+import { Context, ES1ObjectReference } from '../Runtime/Context';
 import { map } from 'fp-ts/State';
 import { pipe } from 'fp-ts/function';
 
@@ -19,13 +19,9 @@ export interface ES1ObjectRepresentation { // In Acropolis, State of object is t
 export class ES1Object extends ES1Value {
   protected representation!: ES1ObjectReference;
 
-  static equals(a: ES1Object, b: ES1Object) {
-    return a.representation === b.representation;
-  }
-
-  static Object(objectDescriptor: ES1ObjectRepresentation): (environment: Environment) => [ES1Object, Environment] {
+  static Object(objectDescriptor: ES1ObjectRepresentation): (environment: Context) => [ES1Object, Context] {
     return pipe(
-      Environment.createObject(objectDescriptor),
+      Context.createObject(objectDescriptor),
       map(objectReference => new ES1Object(objectReference))
     );
   }
