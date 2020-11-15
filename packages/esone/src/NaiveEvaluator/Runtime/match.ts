@@ -1,6 +1,7 @@
 import { AST } from '../../Parser/AST';
-import { abrupt, Runtime, RuntimeError } from './Runtime';
+import { abrupt, Runtime } from './Runtime';
+import { assertAST } from '../../Parser/AST';
 
 export function match<T extends AST>(astType: T['type'], then: (ast: T) => Runtime, orElse?: (ast: AST) => Runtime): (ast: AST) => Runtime {
-  return ast => ast.type === astType ? then(ast as T) : orElse ? orElse(ast) : abrupt(new RuntimeError('AST 매칭 실패'));
+  return ast => assertAST(ast, astType) ? then(ast) : orElse ? orElse(ast) : abrupt('AST 매칭 실패');
 }

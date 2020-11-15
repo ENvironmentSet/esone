@@ -1,5 +1,5 @@
 import { isNone, none, Option, some } from 'fp-ts/Option';
-import { ValueIdentifier } from '../Runtime/Runtime';
+import { ValueIdentifier } from '../Runtime/Context';
 
 export type Stage = 'used' | 'unused';
 
@@ -14,6 +14,6 @@ export abstract class ES1Value {
   }
 
   use(identifier: ValueIdentifier): this {
-    return Object.create(this, { stage: { value: some(identifier) } });
+    return Object.create(this, { identifier: { value: some(identifier) } });
   }
 }
