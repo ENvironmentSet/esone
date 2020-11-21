@@ -1,36 +1,68 @@
 import { ES1Value } from '../Type/ES1Value';
-import { init, last, NonEmptyArray, snoc } from 'fp-ts/NonEmptyArray';
+import { init, NonEmptyArray, snoc, head } from 'fp-ts/NonEmptyArray';
 import { insertAt, lookup, member, updateAt } from 'fp-ts/Map';
 import { eqString } from 'fp-ts/Eq';
 import { chain as optionChain, map as optionMap, none, Option, some } from 'fp-ts/Option';
 import { pipe } from 'fp-ts/function';
-import { findLast } from 'fp-ts/Array';
+import { findLast, dropLeftWhile, map } from 'fp-ts/Array';
+import { Layered } from '../../utils/Layered/Layered';
 
 export type BindingIdentifier = string;
 
 export type ValueIdentifier = number;
 
-type Scope = Map<BindingIdentifier, ES1Value>;
-
-export class Context { //@TODO: use better way to clone itself
+class Scope extends Layered {
   constructor(
-    private scopes: NonEmptyArray<Scope> = [new Map()],
-    private valueIdentifierGenerationBoundary: ValueIdentifier = 0,
-  ) {}
+    public bindings: Map<BindingIdentifier, ES1Value> = new Map,
+    public isClosed: boolean = false
+  ) {
+    super();
+  }
+}
 
-  generateValueIdentifier(): [ValueIdentifier, Context] {
-    return [this.valueIdentifierGenerationBoundary, new Context(this.scopes, this.valueIdentifierGenerationBoundary + 1)];
+export class Context extends Layered { //@TODO: use better way to clone itself
+  constructor(
+    private scopes: NonEmptyArray<Scope> = [new Scope],
+    private valueIdentifierGenerationBoundary: ValueIdentifier = 0,
+  ) {
+    super();
   }
 
-  bind(value: ES1Value, identifier: BindingIdentifier): Context {
-    return new Context(
-      snoc(init(this.scopes), insertAt(eqString)(identifier, value)(last(this.scopes))),
-      this.valueIdentifierGenerationBoundary
+  generateValueIdentifier(): [ValueIdentifier, Context] {
+    const valueIdentifierGenerationBoundary = this.valueIdentifierGenerationBoundary;
+
+    return [
+      valueIdentifierGenerationBoundary,
+      this.next(self => self.valueIdentifierGenerationBoundary = valueIdentifierGenerationBoundary + 1)
+    ];
+  }
+
+  get scopeChain(): NonEmptyArray<Scope> {
+    return pipe(
+      this.scopes,
+      dropLeftWhile(({ isClosed }) => isClosed)
+    ) as NonEmptyArray<Scope>;
+  }
+
+  getBindingStore(identifier: BindingIdentifier): Option<Scope['bindings']> {
+    return pipe(
+      this.scopes,
+      map(({ bindings }) => bindings),
+      findLast(member(eqString)(identifier))
     );
   }
 
-  isolate(): Context {
-    return new Context([...this.scopes, new Map] as NonEmptyArray<Scope>, this.valueIdentifierGenerationBoundary);
+  bind(value: ES1Value, identifier: BindingIdentifier): Context {
+    return this.next(context => {
+      context.scopes = snoc(
+        init(this.scopes),
+        head(this.scopes).next(scope => scope.bindings = insertAt(eqString)(identifier, value)(scope.bindings))
+      );
+    });
+  }
+
+  isolate(isClosed: boolean = false): Context {
+    return new Context([...this.scopes, [new Map, isClosed]] as NonEmptyArray<Scope>, this.valueIdentifierGenerationBoundary);
   }
 
   terminate(): Option<Context> {
@@ -39,16 +71,14 @@ export class Context { //@TODO: use better way to clone itself
 
   ref(identifier: BindingIdentifier): Option<ES1Value> {
     return pipe(
-      this.scopes,
-      findLast(member(eqString)(identifier)),
+      this.getBindingStore(identifier),
       optionChain(lookup(eqString)(identifier))
     )
   }
 
   set(identifier: BindingIdentifier, value: ES1Value): Option<Context> {
     return pipe(
-      this.scopes,
-      findLast(member(eqString)(identifier)),
+      this.getBindingStore(identifier),
       optionChain(updateAt(eqString)(identifier, value)),
       optionMap(closestScope => new Context([...init(this.scopes), closestScope] as NonEmptyArray<Scope>, this.valueIdentifierGenerationBoundary))
     )
