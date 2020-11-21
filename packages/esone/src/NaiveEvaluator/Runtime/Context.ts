@@ -40,7 +40,7 @@ export class Context extends Layered { //@TODO: use better way to clone itself
   get scopeChain(): NonEmptyArray<Scope> {
     return pipe(
       this.scopes,
-      dropLeftWhile(({ isClosed }) => isClosed)
+      dropLeftWhile(({ isClosed }) => !isClosed)
     ) as NonEmptyArray<Scope>;
   }
 
