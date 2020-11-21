@@ -3,9 +3,14 @@ import { Either, right, map as eitherMap, flatten, left } from 'fp-ts/lib/Either
 import { ES1Value } from '../Type/ES1Value';
 import { constant, flow, pipe } from 'fp-ts/function';
 import { Context, BindingIdentifier } from './Context';
+import { fst } from 'fp-ts/Tuple';
 import { RuntimeError } from './RuntimeError';
 
 export type Runtime = (context: Context) => Either<RuntimeError, [Option<ES1Value>, Context]>;
+
+export function run(program: Runtime, context: Context): Either<RuntimeError, Option<ES1Value>> {
+  return eitherMap<[Option<ES1Value>, Context], Option<ES1Value>>(fst)<RuntimeError>(program(context))
+}
 
 export function result(value: Option<ES1Value>, context: Context): ReturnType<Runtime> {
   return right([value, context]);
