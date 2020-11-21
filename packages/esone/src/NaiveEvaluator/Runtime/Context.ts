@@ -11,7 +11,7 @@ export type BindingIdentifier = string;
 
 export type ValueIdentifier = number;
 
-class Scope extends Layered {
+export class Scope extends Layered {
   constructor(
     public bindings: Map<BindingIdentifier, ES1Value> = new Map,
     public isClosed: boolean = false
