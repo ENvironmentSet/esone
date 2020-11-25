@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/ENvironmentSet/esone#readme",
   "dependencies": {
-    "fp-ts": "^2.8.2",
-    "immutable": "^4.0.0-rc.12"
+    "fp-ts": "^2.8.2"
   }
 }
