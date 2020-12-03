@@ -69,3 +69,5 @@ export const empty: Runtime = context => result(none, context);
 export function abrupt(errorMessage: string): Runtime {
   return constant(left(new RuntimeError(errorMessage)));
 }
+
+export const notImplemented = abrupt('NotImplemented');
