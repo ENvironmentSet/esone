@@ -29,11 +29,9 @@ export class Context extends Layered { //@TODO: use better way to clone itself
   }
 
   generateValueIdentifier(): [ValueIdentifier, Context] {
-    const valueIdentifierGenerationBoundary = this.valueIdentifierGenerationBoundary;
-
     return [
-      valueIdentifierGenerationBoundary,
-      this.next(self => self.valueIdentifierGenerationBoundary = valueIdentifierGenerationBoundary + 1)
+      this.valueIdentifierGenerationBoundary,
+      this.next(self => self.valueIdentifierGenerationBoundary++)
     ];
   }
 

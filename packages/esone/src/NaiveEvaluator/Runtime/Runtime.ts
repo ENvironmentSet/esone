@@ -9,7 +9,7 @@ import { RuntimeError } from './RuntimeError';
 export type Runtime = (context: Context) => Either<RuntimeError, [Option<ES1Value>, Context]>;
 
 export function run(program: Runtime, context: Context): Either<RuntimeError, Option<ES1Value>> {
-  return eitherMap<[Option<ES1Value>, Context], Option<ES1Value>>(fst)<RuntimeError>(program(context))
+  return eitherMap<[Option<ES1Value>, Context], Option<ES1Value>>(fst)<RuntimeError>(program(context));
 }
 
 export function result(value: Option<ES1Value>, context: Context): ReturnType<Runtime> {
@@ -61,7 +61,7 @@ export function extend(runtime: Runtime, extender: (value: Option<ES1Value>) => 
     runtime,
     eitherMap(([value, context]) => extender(value)(context)),
     flatten
-  )
+  );
 }
 
 export const empty: Runtime = context => result(none, context);
