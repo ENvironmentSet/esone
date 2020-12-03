@@ -2,6 +2,7 @@ import { match } from '../../Runtime/match';
 import { compileIdentifierReference } from './compileIdentifierReference';
 import { compileThis } from './compileThis';
 import { compileLiteral } from './Literal/compileLiteral';
+import { compileGrouping } from './compileGrouping';
 
 export const compilePrimary = match(
     'IdentifierReference',
@@ -9,6 +10,10 @@ export const compilePrimary = match(
     match(
       'This',
       compileThis,
-      compileLiteral
+      match(
+        'Grouping',
+        compileGrouping,
+        compileLiteral
+      )
     )
   );
