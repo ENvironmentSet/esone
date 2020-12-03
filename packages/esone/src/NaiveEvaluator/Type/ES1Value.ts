@@ -1,7 +1,6 @@
 import { isNone, none, Option, some } from 'fp-ts/Option';
 import { ValueIdentifier } from '../Runtime/Context';
-
-export type Stage = 'used' | 'unused';
+import { ES1Object } from './ES1Object';
 
 export abstract class ES1Value {
   protected constructor(
@@ -14,6 +13,10 @@ export abstract class ES1Value {
   }
 
   use(identifier: ValueIdentifier): this {
-    return Object.create(this, { identifier: { value: some(identifier) } });
+    return Object.create(this, {identifier: {value: some(identifier)}});
   }
+
+  abstract wrap(): Option<ES1Object>;
+
+  //abstract toString(): string; //@TODO: Use ES1String Instead
 }

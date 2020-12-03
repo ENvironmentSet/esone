@@ -1,7 +1,7 @@
-import { Option, none, some, getOrElse, map as optionMap } from 'fp-ts/lib/Option';
+import { Option, none, some, getOrElse, map as optionMap, filter } from 'fp-ts/lib/Option';
 import { Either, right, map as eitherMap, flatten, left } from 'fp-ts/lib/Either';
 import { ES1Value } from '../Type/ES1Value';
-import { constant, flow, pipe } from 'fp-ts/function';
+import { constant, flow, pipe, Predicate, unsafeCoerce } from 'fp-ts/function';
 import { Context, BindingIdentifier } from './Context';
 import { fst } from 'fp-ts/Tuple';
 import { RuntimeError } from './RuntimeError';
@@ -68,6 +68,15 @@ export const empty: Runtime = context => result(none, context);
 
 export function abrupt(errorMessage: string): Runtime {
   return constant(left(new RuntimeError(errorMessage)));
+}
+
+export function withValue<T extends ES1Value>(f: (value: T) => Runtime, checker: Predicate<ES1Value> = constant(true)): (value: Option<ES1Value>) => Runtime {
+  return flow(
+    filter(checker),
+    unsafeCoerce,
+    optionMap(f),
+    getOrElse(constant(abrupt('no value')))
+  );
 }
 
 export const notImplemented = abrupt('NotImplemented');
