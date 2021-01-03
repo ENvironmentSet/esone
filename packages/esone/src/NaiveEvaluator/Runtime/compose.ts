@@ -1,6 +1,7 @@
-import { Runtime, extend, empty } from './Runtime';
+import { Runtime, extend } from './Runtime';
 import { constant } from 'fp-ts/function';
+import { ES1Value } from '../Type/ES1Value';
 
-export function compose(...runtimes: Array<Runtime>): Runtime {
-  return runtimes.reduce((f, g) => extend(f, constant(g)), empty);
+export function compose<T>(a: Runtime<ES1Value>, b: Runtime<T>): Runtime<T> {
+  return extend(a, constant(b));
 }

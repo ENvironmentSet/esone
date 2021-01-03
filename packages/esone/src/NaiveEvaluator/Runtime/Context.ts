@@ -1,84 +1,97 @@
+import { Immutable } from '../../utils/Immutable/Immutable';
+import { chain, isSome, none, Option, some, map, getFirstMonoid } from 'fp-ts/Option';
 import { ES1Value } from '../Type/ES1Value';
-import { init, NonEmptyArray, snoc, head } from 'fp-ts/NonEmptyArray';
-import { insertAt, lookup, member, updateAt } from 'fp-ts/Map';
-import { eqString } from 'fp-ts/Eq';
-import { chain as optionChain, map as optionMap, none, Option, some } from 'fp-ts/Option';
+import { MarkAsOpaqueType } from '../../utils/Type/MarkAsOpaqueType';
+import { lookup, insertAt, member } from 'fp-ts/Map';
+import { eqNumber, eqString } from 'fp-ts/Eq';
+import { ES1Object } from '../Type/ES1Object';
+import { Runtime } from './Runtime';
+import { right } from 'fp-ts/Either';
 import { pipe } from 'fp-ts/function';
-import { findLast, dropLeftWhile, map } from 'fp-ts/Array';
-import { Layered } from '../../utils/Layered/Layered';
 
-export type BindingIdentifier = string;
+export type BindingId = string;
 
-export type ValueIdentifier = number;
+export type ScopeId = MarkAsOpaqueType<number, 'ScopeId'>;
 
-export class Scope extends Layered {
+const { concat } = getFirstMonoid<ES1Value>();
+
+export class Scope extends Immutable {
   constructor(
-    public bindings: Map<BindingIdentifier, ES1Value> = new Map,
-    public isClosed: boolean = false
-  ) {
-    super();
+    public outerScope: Option<ScopeId> = none,
+    public bindings: Map<BindingId, ES1Value> = new Map
+  ) { super(); }
+
+  //@Refactor: Add chaining method
+  public ref(name: BindingId, context: Context): Option<ES1Value> {
+    return concat(lookup(eqString)(name, this.bindings), chain<ScopeId, ES1Value>(outerScopeId => chain<Scope, ES1Value>(scope => scope.ref(name, context))(context.getScope(outerScopeId)))(this.outerScope));
+  }
+
+  public has(name: BindingId, context: Context): boolean {
+    return isSome(this.ref(name, context));
+  }
+
+  public bind(value: ES1Value, name: BindingId, context: Context): Option<Scope> {
+    return this.has(name, context) ? none : some(this.update({ bindings: insertAt(eqString)(name, value)(this.bindings) }));
+  }
+
+  public set(value: ES1Value, name: BindingId, context: Context): Option<Scope> {
+    return member(eqString)(name, this.bindings) ? some(this.update({ bindings: insertAt(eqString)(name, value)(this.bindings) })) : chain<ScopeId, Scope>(outerScopeId => chain<Scope, Scope>(scope => scope.set(value, name, context))(context.getScope(outerScopeId)))(this.outerScope);
   }
 }
 
-export class Context extends Layered { //@TODO: use better way to clone itself
-  constructor(
-    private scopes: NonEmptyArray<Scope> = [new Scope],
-    private valueIdentifierGenerationBoundary: ValueIdentifier = 0,
-  ) {
-    super();
+export type ObjectId = MarkAsOpaqueType<number, 'ObjectId'>;
+
+export class Context extends Immutable { // need Monad Instance
+  protected constructor(
+    private scopes: Map<ScopeId, Scope>,
+    private scopeIdGenerationBoundary: ScopeId,
+    private currentlyReferencedScope: ScopeId,
+    private objectIdGenerationBoundary: ObjectId = 0 as ObjectId,
+  ) { super(); }
+
+  static createContext(globalScope: Scope = new Scope): Context {
+    return new Context(new Map([[0 as ScopeId, globalScope]]), 1 as ScopeId, 0 as ScopeId);
   }
 
-  generateValueIdentifier(): [ValueIdentifier, Context] {
-    return [
-      this.valueIdentifierGenerationBoundary,
-      this.next(self => self.valueIdentifierGenerationBoundary++)
-    ];
+  public createScope(outerScope: Option<ScopeId>): [ScopeId, Context, ScopeId] {
+    const newScope = new Scope(outerScope);
+    const newScopeId = (this.scopeIdGenerationBoundary + 1) as ScopeId;
+    const newScopeMap = insertAt(eqNumber)(newScopeId, newScope)(this.scopes) as Map<ScopeId, Scope>;
+    const previousScope = this.currentlyReferencedScope;
+
+    return [newScopeId, this.update({ scopes: newScopeMap, scopeIdGenerationBoundary: newScopeId, currentReferencedScope: newScopeId }), previousScope];
   }
 
-  get scopeChain(): NonEmptyArray<Scope> {
+  public introduceObject(object: ES1Object): ReturnType<Runtime<ES1Object>> {
+    return cont => cont(right([some(object.setId(this.objectIdGenerationBoundary)), this.update({ objectIdGenerationBoundary: this.objectIdGenerationBoundary + 1 })]));
+  }
+
+  public bind(value: ES1Value, name: BindingId): Option<Context> {
     return pipe(
-      this.scopes,
-      dropLeftWhile(({ isClosed }) => !isClosed)
-    ) as NonEmptyArray<Scope>;
-  }
-
-  getBindingStore(identifier: BindingIdentifier): Option<Scope['bindings']> {
-    return pipe(
-      this.scopes,
-      map(({ bindings }) => bindings),
-      findLast(member(eqString)(identifier))
+      this.getScope(this.currentlyReferencedScope),
+      chain(scope => scope.bind(value, name, this)),
+      map(scope => insertAt(eqNumber)(this.currentlyReferencedScope, scope)(this.scopes) as Map<ScopeId, Scope>),
+      map(scopes => this.update({ scopes })),
     );
   }
 
-  bind(value: ES1Value, identifier: BindingIdentifier): Context {
-    return this.next(context => {
-      context.scopes = snoc(
-        init(this.scopes),
-        head(this.scopes).next(scope => scope.bindings = insertAt(eqString)(identifier, value)(scope.bindings))
-      );
-    });
+  public getScope(id: ScopeId): Option<Scope> {
+    return lookup(eqNumber)(id, this.scopes);
   }
 
-  isolate(isClosed: boolean = false): Context {
-    return new Context([...this.scopes, [new Map, isClosed]] as NonEmptyArray<Scope>, this.valueIdentifierGenerationBoundary);
-  }
-
-  terminate(): Option<Context> {
-    return this.scopes.length > 1 ? some(new Context(init(this.scopes) as NonEmptyArray<Scope>, this.valueIdentifierGenerationBoundary)) : none;
-  }
-
-  ref(identifier: BindingIdentifier): Option<ES1Value> {
+  public get(name: BindingId): Option<ES1Value> {
     return pipe(
-      this.getBindingStore(identifier),
-      optionChain(lookup(eqString)(identifier))
-    )
+      this.getScope(this.currentlyReferencedScope),
+      chain(scope => scope.ref(name, this))
+    );
   }
 
-  set(identifier: BindingIdentifier, value: ES1Value): Option<Context> {
+  public set(value: ES1Value, name: BindingId): Option<Context> {
     return pipe(
-      this.getBindingStore(identifier),
-      optionChain(updateAt(eqString)(identifier, value)),
-      optionMap(closestScope => new Context([...init(this.scopes), closestScope] as NonEmptyArray<Scope>, this.valueIdentifierGenerationBoundary))
-    )
+      this.getScope(this.currentlyReferencedScope),
+      chain(scope => scope.set(value, name, this)),
+      map(scope => insertAt(eqNumber)(this.currentlyReferencedScope, scope)(this.scopes) as Map<ScopeId, Scope>),
+      map(scopes => this.update({ scopes })),
+    );
   }
 }

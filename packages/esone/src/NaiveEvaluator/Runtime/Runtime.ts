@@ -1,82 +1,65 @@
-import { Option, none, some, getOrElse, map as optionMap, filter } from 'fp-ts/lib/Option';
-import { Either, right, map as eitherMap, flatten, left } from 'fp-ts/lib/Either';
 import { ES1Value } from '../Type/ES1Value';
-import { constant, flow, pipe, Predicate, unsafeCoerce } from 'fp-ts/function';
-import { Context, BindingIdentifier } from './Context';
-import { fst } from 'fp-ts/Tuple';
+import { BindingId, Context, ScopeId } from './Context';
+import { Either, left, right, chain as eitherChain, map as eitherMap } from 'fp-ts/Either';
 import { RuntimeError } from './RuntimeError';
+import { Option, none, fold, some } from 'fp-ts/Option';
+import { constant, flow, identity } from 'fp-ts/function';
+import { map as tupleMap } from 'fp-ts/Tuple';
 
-export type Runtime = (context: Context) => Either<RuntimeError, [Option<ES1Value>, Context]>;
+type Cont<T> = <R>(cont: (result: T) => R) => R;
 
-export function run(program: Runtime, context: Context): Either<RuntimeError, Option<ES1Value>> {
-  return eitherMap<[Option<ES1Value>, Context], Option<ES1Value>>(fst)<RuntimeError>(program(context));
+export type Runtime<T> = (context: Context) => Cont<Either<RuntimeError, [Option<T>, Context]>>;
+
+function finish<T>(resultValue: Option<T>, resultContext: Context): ReturnType<Runtime<T>> {
+  return f => f(right([resultValue, resultContext]));
 }
 
-export function result(value: Option<ES1Value>, context: Context): ReturnType<Runtime> {
-  return right([value, context]);
+export function empty<T>(): Runtime<T> {
+  return context => finish(none, context);
 }
 
-export function intro(value: ES1Value): Runtime {
-  return context => {
-    const [valueIdentifier, resultContext] = context.generateValueIdentifier();
+export function error<T>(message: string): Runtime<T> {
+  return constant(f => f(left(new RuntimeError(message))));
+}
 
-    return result(some(value.use(valueIdentifier)), resultContext);
+export function run<T>(context: Context, runtime: Runtime<T>): Either<RuntimeError, [Option<T>, Context]> {
+  return runtime(context)(identity);
+}
+
+export function isolate<T>(baseScope: Option<ScopeId>, runtime: (escape: (result: Option<T>) => Runtime<T>, scopeId: ScopeId) => Runtime<T>): Runtime<T> {
+  return context => cont => {
+    const [currentScopeId, newContext, previousScope] = context.createScope(baseScope);
+
+    return runtime(result => context2 => () => finish(result, context2.update({ currentlyReferencedScope: previousScope }))(cont), currentScopeId)(newContext)(cont);
   };
 }
 
-export function bind(value: ES1Value, identifier: BindingIdentifier): Runtime {
-  return value.isIntroduced ? context => result(none, context.bind(value, identifier)) : abrupt('Unrecognizable value');
+//@Refactor boilerplate code
+export function bind<T>(value: ES1Value, name: BindingId): Runtime<T> {
+  return context => cont => fold(constant(error<T>('Fail to bind value')(context)), empty<T>())(context.bind(value, name))(cont);
 }
 
-export function ref(identifier: BindingIdentifier): Runtime {
-  return context => pipe(
-    context.ref(identifier),
-    optionMap(value => result(some(value), context)),
-    getOrElse(() => abrupt('값 못 찾음.')(context))
-  );
+export function get(name: BindingId): Runtime<ES1Value> {
+  return context => cont => fold(constant(error<ES1Value>('Fail to find binding')(context)), (value: ES1Value) => finish(some(value), context))(context.get(name))(cont);
 }
 
-export function set(identifier: BindingIdentifier, value: ES1Value): Runtime {
-  return context => pipe(
-    context.set(identifier, value),
-    optionMap(context => result(none, context)),
-    getOrElse(() => abrupt('값 못 넣음.')(context))
-  );
+export function set<T>(value: ES1Value, name: BindingId): Runtime<T> {
+  return context => cont => fold(constant(error<T>('Fail to bind value')(context)), empty<T>())(context.set(value, name))(cont);
 }
 
-export function isolate(): Runtime {
-  return context => result(none, context.isolate());
-}
+export function extend<A extends ES1Value, B>(runtime: Runtime<A>, extender: (value: Option<A>) => Runtime<B>): Runtime<B> {
+  return context => cont => cont(runtime(context)(eitherChain(([value, context]) => run(context, extender(value)))));
+} //Prove
 
-export function terminate(resultValue: Option<ES1Value>): Runtime {
-  return context => pipe(
-    context.terminate(),
-    optionMap(context => result(resultValue, context)),
-    getOrElse(() => abrupt('스코프는 최소 한 개 존재해야.')(context))
-  );
-}
-
-export function extend(runtime: Runtime, extender: (value: Option<ES1Value>) => Runtime): Runtime {
-  return flow(
+export function lift<A extends ES1Value, B>(f: (value: Option<A>) => Option<B>): (runtime: Runtime<A>) => Runtime<B> {
+  return runtime => flow(
     runtime,
-    eitherMap(([value, context]) => extender(value)(context)),
-    flatten
+    cont => cont2 => cont(flow(eitherMap(
+      flow(
+        tupleMap(f),
+        ([value, context]) => [value, context] as [Option<B>, Context],
+      )),
+      cont2
+    )),
   );
 }
-
-export const empty: Runtime = context => result(none, context);
-
-export function abrupt(errorMessage: string): Runtime {
-  return constant(left(new RuntimeError(errorMessage)));
-}
-
-export function withValue<T extends ES1Value>(f: (value: T) => Runtime, checker: Predicate<ES1Value> = constant(true)): (value: Option<ES1Value>) => Runtime {
-  return flow(
-    filter(checker),
-    unsafeCoerce,
-    optionMap(f),
-    getOrElse(constant(abrupt('no value')))
-  );
-}
-
-export const notImplemented = abrupt('NotImplemented');
