@@ -4,7 +4,7 @@ import { Either, left, right, chain as eitherChain, map as eitherMap } from 'fp-
 import { RuntimeError } from './RuntimeError';
 import { Option, none, fold, some } from 'fp-ts/Option';
 import { constant, flow, identity } from 'fp-ts/function';
-import { map as tupleMap } from 'fp-ts/Tuple';
+import { fst, map as tupleMap } from 'fp-ts/Tuple';
 
 type Cont<T> = <R>(cont: (result: T) => R) => R;
 
@@ -22,8 +22,8 @@ export function error<T>(message: string): Runtime<T> {
   return constant(f => f(left(new RuntimeError(message))));
 }
 
-export function run<T>(context: Context, runtime: Runtime<T>): Either<RuntimeError, [Option<T>, Context]> {
-  return runtime(context)(identity);
+export function run<T>(context: Context, runtime: Runtime<T>): Either<RuntimeError, Option<T>> {
+  return eitherMap<[Option<T>, Context], Option<T>>(fst)(runtime(context)(identity));
 }
 
 export function isolate<T>(baseScope: Option<ScopeId>, runtime: (escape: (result: Option<T>) => Runtime<T>, scopeId: ScopeId) => Runtime<T>): Runtime<T> {
@@ -48,7 +48,7 @@ export function set<T>(value: ES1Value, name: BindingId): Runtime<T> {
 }
 
 export function extend<A extends ES1Value, B>(runtime: Runtime<A>, extender: (value: Option<A>) => Runtime<B>): Runtime<B> {
-  return context => cont => cont(runtime(context)(eitherChain(([value, context]) => run(context, extender(value)))));
+  return context => cont => cont(runtime(context)(eitherChain(([value, context]) => extender(value)(context)(identity))));
 }
 
 export function lift<A extends ES1Value, B>(f: (value: Option<A>) => Option<B>): (runtime: Runtime<A>) => Runtime<B> {
