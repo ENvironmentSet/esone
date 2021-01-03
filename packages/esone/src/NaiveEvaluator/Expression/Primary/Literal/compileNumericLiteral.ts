@@ -3,5 +3,5 @@ import { Runtime } from '../../../Runtime/Runtime';
 import { intro } from '../../../Runtime/intro';
 import { ES1Number } from '../../../Type/ES1Number';
 
-export const compileNumericLiteral: (numericLiteral: NumericLiteral) => Runtime<ES1Number>
-  = numericLiteral => intro(ES1Number.ES1Number(Number(numericLiteral.value.lexeme)));
+export const compileNumericLiteral: (literal: NumericLiteral) => Runtime<ES1Number>
+  = literal => intro(ES1Number.ES1Number(Number(literal.value.lexeme)));

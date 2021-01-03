@@ -1,5 +1,3 @@
-import Literal from '../../../../Parser/AST/Expression/Primary/Literal';
-import { Runtime } from '../../../Runtime/Runtime';
 import { match } from '../../../Runtime/match';
 import { compileBooleanLiteral } from './compileBooleanLiteral';
 import { compileNullLiteral } from './compileNullLiteral';
@@ -8,7 +6,7 @@ import { compileStringLiteral } from './compileStringLiteral';
 import { ES1Value } from '../../../Type/ES1Value';
 import { StringLiteral } from '../../../../Parser/AST/Expression/Primary/Literal';
 
-export const compileLiteral: (literal: Literal) => Runtime<ES1Value> = match(
+export const compileLiteral = match(
   'BoolLiteral',
   compileBooleanLiteral,
   match(
