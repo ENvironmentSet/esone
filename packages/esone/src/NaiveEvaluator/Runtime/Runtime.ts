@@ -49,7 +49,7 @@ export function set<T>(value: ES1Value, name: BindingId): Runtime<T> {
 
 export function extend<A extends ES1Value, B>(runtime: Runtime<A>, extender: (value: Option<A>) => Runtime<B>): Runtime<B> {
   return context => cont => cont(runtime(context)(eitherChain(([value, context]) => run(context, extender(value)))));
-} //Prove
+}
 
 export function lift<A extends ES1Value, B>(f: (value: Option<A>) => Option<B>): (runtime: Runtime<A>) => Runtime<B> {
   return runtime => flow(
