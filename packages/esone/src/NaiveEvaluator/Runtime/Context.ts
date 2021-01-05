@@ -1,5 +1,5 @@
 import { Immutable } from '../../utils/Immutable/Immutable';
-import { chain, isSome, none, Option, some, map, getFirstMonoid } from 'fp-ts/Option';
+import { chain, isSome, none, Option, some, map, getFirstMonoid, flatten } from 'fp-ts/Option';
 import { ES1Value } from '../Type/ES1Value';
 import { MarkAsOpaqueType } from '../../utils/Type/MarkAsOpaqueType';
 import { lookup, insertAt, member } from 'fp-ts/Map';
@@ -21,9 +21,12 @@ export class Scope extends Immutable {
     public bindings: Map<BindingId, ES1Value> = new Map
   ) { super(); }
 
-  //@Refactor: Add chaining method
+  private withOuterScope<A>(f: (outer: Scope) => A, context: Context): Option<A> {
+    return chain((outerScopeId: ScopeId) => map(f)(context.getScope(outerScopeId)))(this.outerScope);
+  }
+  
   public ref(name: BindingId, context: Context): Option<ES1Value> {
-    return concat(lookup(eqString)(name, this.bindings), chain<ScopeId, ES1Value>(outerScopeId => chain<Scope, ES1Value>(scope => scope.ref(name, context))(context.getScope(outerScopeId)))(this.outerScope));
+    return concat(lookup(eqString)(name, this.bindings), flatten(this.withOuterScope(scope => scope.ref(name, context), context)));
   }
 
   public has(name: BindingId, context: Context): boolean {
@@ -35,7 +38,7 @@ export class Scope extends Immutable {
   }
 
   public set(value: ES1Value, name: BindingId, context: Context): Option<Scope> {
-    return member(eqString)(name, this.bindings) ? some(this.update({ bindings: insertAt(eqString)(name, value)(this.bindings) })) : chain<ScopeId, Scope>(outerScopeId => chain<Scope, Scope>(scope => scope.set(value, name, context))(context.getScope(outerScopeId)))(this.outerScope);
+    return member(eqString)(name, this.bindings) ? some(this.update({ bindings: insertAt(eqString)(name, value)(this.bindings) })) : flatten(this.withOuterScope(scope => scope.set(value, name, context), context));
   }
 }
 
