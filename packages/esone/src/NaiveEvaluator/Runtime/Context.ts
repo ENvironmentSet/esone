@@ -24,7 +24,7 @@ export class Scope extends Immutable {
   private withOuterScope<A>(f: (outer: Scope) => A, context: Context): Option<A> {
     return chain((outerScopeId: ScopeId) => map(f)(context.getScope(outerScopeId)))(this.outerScope);
   }
-  
+
   public ref(name: BindingId, context: Context): Option<ES1Value> {
     return concat(lookup(eqString)(name, this.bindings), flatten(this.withOuterScope(scope => scope.ref(name, context), context)));
   }
@@ -96,5 +96,9 @@ export class Context extends Immutable { // need Monad Instance
       map(scope => insertAt(eqNumber)(this.currentlyReferencedScope, scope)(this.scopes) as Map<ScopeId, Scope>),
       map(scopes => this.update({ scopes })),
     );
+  }
+
+  public get currentScope(): ScopeId {
+    return this.currentlyReferencedScope;
   }
 }

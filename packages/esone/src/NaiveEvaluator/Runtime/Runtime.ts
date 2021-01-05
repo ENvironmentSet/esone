@@ -5,6 +5,7 @@ import { RuntimeError } from './RuntimeError';
 import { Option, none, fold, some } from 'fp-ts/Option';
 import { constant, flow, identity } from 'fp-ts/function';
 import { fst, map as tupleMap } from 'fp-ts/Tuple';
+import { ES1Reference } from '../Type/ES1Reference';
 
 type Cont<T> = <R>(cont: (result: T) => R) => R;
 
@@ -26,6 +27,7 @@ export function run<T>(context: Context, runtime: Runtime<T>): Either<RuntimeErr
   return eitherMap<[Option<T>, Context], Option<T>>(fst)(runtime(context)(identity));
 }
 
+//objective scopes -> GlobalScope class.
 export function isolate<T>(baseScope: Option<ScopeId>, runtime: (escape: (result: Option<T>) => Runtime<T>, scopeId: ScopeId) => Runtime<T>): Runtime<T> {
   return context => cont => {
     const [currentScopeId, newContext, previousScope] = context.createScope(baseScope);
@@ -40,7 +42,7 @@ export function bind<T>(value: ES1Value, name: BindingId): Runtime<T> {
 }
 
 export function get(name: BindingId): Runtime<ES1Value> {
-  return context => cont => fold(constant(error<ES1Value>('Fail to find binding')(context)), (value: ES1Value) => finish(some(value), context))(context.get(name))(cont);
+  return context => finish(some(ES1Reference.ES1Reference({ base: context.currentScope, referencedBinding: name })), context);
 }
 
 export function set<T>(value: ES1Value, name: BindingId): Runtime<T> {
