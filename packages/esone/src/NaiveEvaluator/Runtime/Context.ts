@@ -70,16 +70,20 @@ export class Context extends Immutable { // need Monad Instance
   }
 
   public bind(value: ES1Value, name: BindingId): Option<Context> {
-    return pipe(
-      this.getScope(this.currentlyReferencedScope),
-      chain(scope => scope.bind(value, name, this)),
-      map(scope => insertAt(eqNumber)(this.currentlyReferencedScope, scope)(this.scopes) as Map<ScopeId, Scope>),
-      map(scopes => this.update({ scopes })),
-    );
+    return this.modifyScope(this.currentScope, scope => scope.bind(value, name, this));
   }
 
   public getScope(id: ScopeId): Option<Scope> {
     return lookup(eqNumber)(id, this.scopes);
+  }
+
+  public modifyScope(id: ScopeId, f: (scope: Scope) => Option<Scope>): Option<Context> {
+    return pipe(
+      this.getScope(id),
+      chain(f),
+      map(scope => insertAt(eqNumber)(id, scope)(this.scopes) as Map<ScopeId, Scope>),
+      map(scopes => this.update({ scopes })),
+    )
   }
 
   public get(name: BindingId): Option<ES1Value> {
@@ -90,12 +94,7 @@ export class Context extends Immutable { // need Monad Instance
   }
 
   public set(value: ES1Value, name: BindingId): Option<Context> {
-    return pipe(
-      this.getScope(this.currentlyReferencedScope),
-      chain(scope => scope.set(value, name, this)),
-      map(scope => insertAt(eqNumber)(this.currentlyReferencedScope, scope)(this.scopes) as Map<ScopeId, Scope>),
-      map(scopes => this.update({ scopes })),
-    );
+    return this.modifyScope(this.currentScope, scope => scope.set(value, name, this));
   }
 
   public get currentScope(): ScopeId {
