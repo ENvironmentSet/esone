@@ -1,13 +1,17 @@
 import { ES1Value } from './ES1Value';
 import { ES1String } from './ES1String';
 import { Option, none, isSome, fold, map, getOrElse } from 'fp-ts/Option';
-import { Runtime } from '../Runtime/Runtime';
+import { error, Runtime } from '../Runtime/Runtime';
 import { Immutable } from '../../utils/Immutable/Immutable';
 import { ObjectId } from '../Runtime/Context';
 import { deleteAt, insertAt, lookup, member } from 'fp-ts/Map';
 import { ES1Undefined } from './ES1Undefined';
 import { constant, pipe } from 'fp-ts/function';
 import { ES1Null } from './ES1Null';
+import { ES1Primitive } from './ES1Primitive';
+import { intro } from '../Runtime/intro';
+import { ES1Boolean } from './ES1Boolean';
+import { ES1Number } from './ES1Number';
 
 export class ES1PropertyRepresentation extends Immutable {
   constructor(
@@ -24,7 +28,7 @@ export class ES1PropertyRepresentation extends Immutable {
 export class ES1ObjectRepresentation extends Immutable {
   constructor(
     public properties: Map<ES1String, ES1PropertyRepresentation> = new Map(),
-    public prototype: ES1Object | ES1Null = ES1Null.ES1Null(), //Class, Value, DefaultValue
+    public prototype: ES1Object | ES1Null = ES1Null.ES1Null(), //Class, Value
   ) {
     super();
   }
@@ -103,5 +107,14 @@ export class ES1Object extends ES1Value {
   }
 
   //@TODO
-  public defaultValue() {}
+  public defaultValue(_: 'String' | 'Number') {}
+
+  //@TODO
+  public toPrimitive(): Runtime<ES1Primitive> { return error('NotImplemented'); }
+  public toBoolean(): Runtime<ES1Boolean> { return intro(ES1Boolean.ES1True()); }
+  //@TODO
+  public toNumber(): Runtime<ES1Number> { return error('NotImplemented'); }
+  //@TODO
+  public toString(): Runtime<ES1String> { return error('NotImplemented'); }
+  public toObject(): Runtime<ES1Object> { return intro(this); }
 }
