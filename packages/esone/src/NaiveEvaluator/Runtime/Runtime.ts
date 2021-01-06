@@ -41,7 +41,7 @@ export function bind<T>(value: ES1Value, name: BindingId): Runtime<T> {
   return context => cont => fold(constant(error<T>('Fail to bind value')(context)), empty<T>())(context.bind(value, name))(cont);
 }
 
-export function get(name: BindingId): Runtime<ES1Value> {
+export function ref(name: BindingId): Runtime<ES1Value> {
   return context => finish(some(ES1Reference.ES1Reference({ base: context.currentScope, referencedBinding: name })), context);
 }
 
