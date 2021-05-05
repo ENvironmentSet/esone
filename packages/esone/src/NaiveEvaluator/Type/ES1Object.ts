@@ -12,6 +12,7 @@ import { ES1Primitive } from './ES1Primitive';
 import { intro } from '../Runtime/intro';
 import { ES1Boolean } from './ES1Boolean';
 import { ES1Number } from './ES1Number';
+import { ES1List } from './ES1List';
 
 export class ES1PropertyRepresentation extends Immutable {
   constructor(
@@ -29,6 +30,8 @@ export class ES1ObjectRepresentation extends Immutable {
   constructor(
     public properties: Map<ES1String, ES1PropertyRepresentation> = new Map(),
     public prototype: ES1Object | ES1Null = ES1Null.ES1Null(), //Class, Value
+    public Call: Option<(args: ES1List, thisValue: ES1Value) => Runtime<ES1Value>> = none, //@TODO: do not interrupt cont
+    public Construct: Option<(args: ES1List, thisValue: ES1Value) => Runtime<ES1Object>> = none,
   ) {
     super();
   }
@@ -117,4 +120,12 @@ export class ES1Object extends ES1Value {
   //@TODO
   public toString(): Runtime<ES1String> { return error('NotImplemented'); }
   public toObject(): Runtime<ES1Object> { return intro(this); }
+
+  public call(args: ES1List, thisValue: ES1Value): Option<Runtime<ES1Value>> {
+    return map((f: (args: ES1List, thisValue: ES1Value) => Runtime<ES1Value>) => f(args, thisValue))(this.representation.Call);
+  }
+
+  public construct(args: ES1List, thisValue: ES1Value): Option<Runtime<ES1Value>> {
+    return map((f: (args: ES1List, thisValue: ES1Value) => Runtime<ES1Value>) => f(args, thisValue))(this.representation.Construct);
+  }
 }

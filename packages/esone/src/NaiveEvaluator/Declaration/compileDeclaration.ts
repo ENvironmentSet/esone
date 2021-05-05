@@ -1,0 +1,1 @@
+export { compileFunction as compileDeclaration } from './compileFunction';

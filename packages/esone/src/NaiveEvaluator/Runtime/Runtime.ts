@@ -1,9 +1,9 @@
 import { ES1Value } from '../Type/ES1Value';
 import { BindingId, Context, ScopeId } from './Context';
-import { Either, left, right, chain as eitherChain, map as eitherMap } from 'fp-ts/Either';
+import { Either, left, right, map as eitherMap, fold as eitherFold } from 'fp-ts/Either';
 import { RuntimeError } from './RuntimeError';
-import { Option, none, fold, some } from 'fp-ts/Option';
-import { constant, flow, identity } from 'fp-ts/function';
+import { Option, none, fold, some, map, getOrElse } from 'fp-ts/Option';
+import { constant, flow, identity, pipe } from 'fp-ts/function';
 import { fst, map as tupleMap } from 'fp-ts/Tuple';
 import { ES1Reference } from '../Type/ES1Reference';
 
@@ -11,7 +11,7 @@ type Cont<T> = <R>(cont: (result: T) => R) => R;
 
 export type Runtime<T> = (context: Context) => Cont<Either<RuntimeError, [Option<T>, Context]>>;
 
-function finish<T>(resultValue: Option<T>, resultContext: Context): ReturnType<Runtime<T>> {
+export function finish<T>(resultValue: Option<T>, resultContext: Context): ReturnType<Runtime<T>> {
   return f => f(right([resultValue, resultContext]));
 }
 
@@ -42,7 +42,11 @@ export function bind<T>(value: ES1Value, name: BindingId): Runtime<T> {
 }
 
 export function ref(name: BindingId): Runtime<ES1Value> {
-  return context => finish(some(ES1Reference.ES1Reference({ base: context.currentScope, referencedBinding: name })), context);
+  return context => pipe(
+    context.resolveScope(context.currentScope, name),
+    map(scopeId => finish(some(ES1Reference.ES1Reference({ base: scopeId, referencedBinding: name })), context)),
+    getOrElse<ReturnType<Runtime<ES1Value>>>(() => error<ES1Value>(`Unresolvable Binding: ${name}`)(context))
+  );
 }
 
 export function set<T>(value: ES1Value, name: BindingId): Runtime<T> {
@@ -50,7 +54,7 @@ export function set<T>(value: ES1Value, name: BindingId): Runtime<T> {
 }
 
 export function extend<A extends ES1Value, B>(runtime: Runtime<A>, extender: (value: Option<A>) => Runtime<B>): Runtime<B> {
-  return context => cont => cont(runtime(context)(eitherChain(([value, context]) => extender(value)(context)(identity))));
+  return context => cont => runtime(context)(eitherFold(runtimeError => cont(left(runtimeError)), ([value, context]: [Option<A>, Context]) => extender(value)(context)(cont)));
 }
 
 export function lift<A extends ES1Value, B>(f: (value: Option<A>) => Option<B>): (runtime: Runtime<A>) => Runtime<B> {

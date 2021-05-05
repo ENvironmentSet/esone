@@ -19,4 +19,12 @@ export class ES1Number extends ES1Value {
   public toString(): Runtime<ES1String> { return intro(ES1String.ES1String(String(this.representation))); }
   //@TODO
   public toObject(): Runtime<ES1Object> { return error('NotImplemented'); }
+
+  public add(x: ES1Number) {
+    return this.representation + x.representation;
+  }
+
+  public sub(x: ES1Number) {
+    return this.representation - x.representation;
+  }
 }

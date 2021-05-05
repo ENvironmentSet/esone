@@ -33,12 +33,16 @@ export class Scope extends Immutable {
     return isSome(this.ref(name, context));
   }
 
+  public hasOwn(name: BindingId): boolean {
+    return member(eqString)(name, this.bindings);
+  }
+
   public bind(value: ES1Value, name: BindingId, context: Context): Option<Scope> {
     return this.has(name, context) ? none : some(this.update({ bindings: insertAt(eqString)(name, value)(this.bindings) }));
   }
 
   public set(value: ES1Value, name: BindingId, context: Context): Option<Scope> {
-    return member(eqString)(name, this.bindings) ? some(this.update({ bindings: insertAt(eqString)(name, value)(this.bindings) })) : flatten(this.withOuterScope(scope => scope.set(value, name, context), context));
+    return this.hasOwn(name) ? some(this.update({ bindings: insertAt(eqString)(name, value)(this.bindings) })) : flatten(this.withOuterScope(scope => scope.set(value, name, context), context));
   }
 }
 
@@ -58,11 +62,11 @@ export class Context extends Immutable { // need Monad Instance
 
   public createScope(outerScope: Option<ScopeId>): [ScopeId, Context, ScopeId] {
     const newScope = new Scope(outerScope);
-    const newScopeId = (this.scopeIdGenerationBoundary + 1) as ScopeId;
+    const newScopeId = this.scopeIdGenerationBoundary as ScopeId;
     const newScopeMap = insertAt(eqNumber)(newScopeId, newScope)(this.scopes) as Map<ScopeId, Scope>;
     const previousScope = this.currentlyReferencedScope;
 
-    return [newScopeId, this.update({ scopes: newScopeMap, scopeIdGenerationBoundary: newScopeId, currentReferencedScope: newScopeId }), previousScope];
+    return [newScopeId, this.update({ scopes: newScopeMap, scopeIdGenerationBoundary: newScopeId + 1, currentlyReferencedScope: newScopeId }), previousScope];
   }
 
   public introduceObject(object: ES1Object): ReturnType<Runtime<ES1Object>> {
@@ -70,7 +74,7 @@ export class Context extends Immutable { // need Monad Instance
   }
 
   public bind(value: ES1Value, name: BindingId): Option<Context> {
-    return this.modifyScope(this.currentScope, scope => scope.bind(value, name, this));
+    return this.modifyScope(this.currentlyReferencedScope, scope => scope.bind(value, name, this));
   }
 
   public getScope(id: ScopeId): Option<Scope> {
@@ -93,8 +97,18 @@ export class Context extends Immutable { // need Monad Instance
     );
   }
 
+  public resolveScope(scopeId: ScopeId, name: BindingId): Option<ScopeId> {
+    return pipe(
+      this.getScope(scopeId),
+      chain(scope => scope.hasOwn(name) ? some(scopeId) : chain((scopeId: ScopeId) => this.resolveScope(scopeId, name))(scope.outerScope))
+    )
+  }
+
   public set(value: ES1Value, name: BindingId): Option<Context> {
-    return this.modifyScope(this.currentScope, scope => scope.set(value, name, this));
+    return pipe(
+      this.resolveScope(this.currentlyReferencedScope, name),
+      chain(scopeId => this.modifyScope(scopeId, scope => scope.set(value, name, this)))
+    )
   }
 
   public get currentScope(): ScopeId {
