@@ -16,7 +16,7 @@ import { compileAssignment } from '../compileAssignment';
 import AST from '../../../Parser/AST';
 
 const compileArguments: (args: Arguments) => Runtime<ES1List> =
-    ([arg, ...tail]) => !arg ? intro(ES1List.ES1List()) : extendWithValue(compileArguments(tail), args => extendWithValue(compileAssignment(arg), arg => intro(ES1List.ES1List(...args, arg))));
+    ([arg, ...tail]) => !arg ? intro(ES1List.ES1List()) : extendWithValue(compileArguments(tail), args => extendWithValue(compileAssignment(arg), argRef => extendWithValue(getValue(argRef), arg => intro(ES1List.ES1List(arg, ...args)))));
 
 const invoke: (f: ES1Value, args: ES1List, thisValue: ES1Value) => Runtime<ES1Value>
   = (f, args, thisValue) => f instanceof ES1Object ? getOrElse<Runtime<ES1Value>>(constant(error('Fail to call')))(f.call(args, thisValue)) : error('Not a Function');
