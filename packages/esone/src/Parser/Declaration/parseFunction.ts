@@ -25,7 +25,7 @@ const parseFormalParameters: TokenState<Identifier[]> = composeTokenStates(
 );
 
 export const parseFunction: Parser<Fn> = tokenState.chain(
-  tokens => matchTokenFromLeft(FnToken)(tokens),
+  matchTokenFromLeft(FnToken),
   _ => tokenState.chain(
     matchTokenFromLeft(Identifier),
     identifier => tokenState.chain(
