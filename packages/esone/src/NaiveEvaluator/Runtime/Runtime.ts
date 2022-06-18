@@ -53,11 +53,11 @@ export function set<T>(value: ES1Value, name: BindingId): Runtime<T> {
   return context => cont => fold(constant(error<T>('Fail to bind value')(context)), empty<T>())(context.set(value, name))(cont);
 }
 
-export function extend<A extends ES1Value, B>(runtime: Runtime<A>, extender: (value: Option<A>) => Runtime<B>): Runtime<B> {
+export function extend<A, B>(runtime: Runtime<A>, extender: (value: Option<A>) => Runtime<B>): Runtime<B> {
   return context => cont => runtime(context)(eitherFold(runtimeError => cont(left(runtimeError)), ([value, context]: [Option<A>, Context]) => extender(value)(context)(cont)));
 }
 
-export function lift<A extends ES1Value, B>(f: (value: Option<A>) => Option<B>): (runtime: Runtime<A>) => Runtime<B> {
+export function lift<A, B>(f: (value: Option<A>) => Option<B>): (runtime: Runtime<A>) => Runtime<B> {
   return runtime => flow(
     runtime,
     cont => cont2 => cont(flow(eitherMap(
