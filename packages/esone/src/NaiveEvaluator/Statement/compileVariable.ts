@@ -10,7 +10,7 @@ import { getValue } from '../Runtime/getValue';
 
 export const compileVariable: (variable: Variable, escape: (result: Option<ES1Value>) => Runtime<ES1Value>) => Runtime<ES1Value>
   = variable => variable.variableDeclarationList.reduce(
-    (prev, variableDeclaration) => context => compose<ES1Value>(
+    (prev, variableDeclaration) => compose<ES1Value, ES1Value>(
       prev,
       variableDeclaration.initializer ?
         extendWithValue(
@@ -21,6 +21,6 @@ export const compileVariable: (variable: Variable, escape: (result: Option<ES1Va
           )
         )
         : bind(ES1Undefined.ES1Undefined(), variableDeclaration.identifier.lexeme)
-    )(context),
+    ),
     empty<ES1Value>()
 );
