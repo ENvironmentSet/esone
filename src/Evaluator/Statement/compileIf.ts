@@ -9,20 +9,16 @@ import { compileStatement } from './compileStatement'
 export const compileIf: (ifStatement: If, escape: (result: Option<ES1Value>) => Runtime<ES1Value>) => Runtime<ES1Value>
   = (ifStatement, escape) => extend(
     compileExpression(ifStatement.condition),
-    cond => {
-      if (isNone(cond)) return error('condition was not evaluated to value')
-      else {
-        const condValue = cond.value
-
-        return extend(
-          condValue.toBoolean(),
-          condBool => {
-            if (isNone(condBool)) return error('condition was not evaluated to boolean')
-            if (ES1Value.equals(condBool.value, ES1Boolean.ES1True())) return compileStatement(ifStatement.then, escape)
-            else if (ifStatement.elseClause)return compileStatement(ifStatement.elseClause, escape)
-            else return empty();
-          }
-        )
-      }
-    }
+    cond => isNone(cond)
+      ? error('condition was not evaluated to value')
+      : extend(
+        cond.value.toBoolean(),
+        cond => isNone(cond)
+          ? error('condition was not evaluated to boolean')
+          : ES1Value.equals(cond.value, ES1Boolean.ES1True())
+            ? compileStatement(ifStatement.then, escape)
+            : ifStatement.elseClause
+              ? compileStatement(ifStatement.elseClause, escape)
+              : empty()
+      )
 )
