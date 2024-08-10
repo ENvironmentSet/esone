@@ -13,6 +13,10 @@ export abstract class ES1Value extends Immutable {
     super();
   }
 
+  public static equals(x: ES1Value, y: ES1Value): boolean {
+    return x.constructor === y.constructor && x.representation === y.representation;
+  }
+
   public abstract toPrimitive(): Runtime<ES1Primitive>;
   public abstract toBoolean(): Runtime<ES1Boolean>;
   public abstract toNumber(): Runtime<ES1Number>;
