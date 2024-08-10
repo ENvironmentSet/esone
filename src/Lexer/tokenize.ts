@@ -14,7 +14,7 @@ const { chain: mergeBranchedOptionalPipe } = getOptionM(func);
 const If: <A, R>(cond: Predicate<A>, onTrue: (a: A) => R, onFalse: () => R) => (a: A) => R =
   (cond, onTrue, onFalse) => a => cond(a) ? onTrue(a) : onFalse();
 
-const scanLeftAndExcludeInitialState: typeof scanLeft = (init, reducer) => flow(
+const scanLeftAndExcludeInitialState = <A, B>(init: B, reducer: (b: B, a: A) => B) => flow(
   scanLeft(init, reducer),
   tail
 );
