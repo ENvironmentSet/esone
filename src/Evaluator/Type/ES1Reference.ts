@@ -71,9 +71,9 @@ export class ES1Reference extends ES1Value {
     )
   }
 
-  public toPrimitive(): Runtime<ES1Primitive> { return error('Not Supported'); }
-  public toBoolean(): Runtime<ES1Boolean> { return error('Not Supported'); }
-  public toNumber(): Runtime<ES1Number> { return error('Not Supported'); }
-  public toString(): Runtime<ES1String> { return error('Not Supported'); }
-  public toObject(): Runtime<ES1Object> { return error('Not Supported'); }
+  public toPrimitive(): Runtime<ES1Primitive> { return extendWithValue(this.getValue(), value => value.toPrimitive()); }
+  public toBoolean(): Runtime<ES1Boolean> { return extendWithValue(this.getValue(), value => value.toBoolean()); }
+  public toNumber(): Runtime<ES1Number> { return extendWithValue(this.getValue(), value => value.toNumber()); }
+  public toString(): Runtime<ES1String> { return extendWithValue(this.getValue(), value => value.toString()); }
+  public toObject(): Runtime<ES1Object> { return extendWithValue(this.getValue(), value => value.toObject()); }
 }
