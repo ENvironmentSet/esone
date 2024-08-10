@@ -1,0 +1,1 @@
+export { constant as of } from 'fp-ts/lib/function';
