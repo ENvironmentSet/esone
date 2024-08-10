@@ -13,7 +13,7 @@ export abstract class ES1Value extends Immutable {
     super();
   }
 
-  public static equals(x: ES1Value, y: ES1Value): boolean {
+  public static equals(x: ES1Value, y: ES1Value): boolean { //@TODO Better comparison model
     return x.constructor === y.constructor && x.representation === y.representation;
   }
 
