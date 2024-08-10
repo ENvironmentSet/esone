@@ -9,7 +9,7 @@ import { ES1Object } from './ES1Object';
 type ES1ListRepresentation = ES1Value[];
 
 export class ES1List extends ES1Value {
-  protected representation!: ES1ListRepresentation;
+  declare protected representation: ES1ListRepresentation;
 
   static ES1List(...representation: ES1ListRepresentation): ES1List {
     return new ES1List(representation);

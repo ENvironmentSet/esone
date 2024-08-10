@@ -25,7 +25,7 @@ interface ES1BindingReferenceRepresentation {
 }
 
 export class ES1Reference extends ES1Value {
-  protected representation!: ES1ReferenceRepresentation;
+  declare protected representation: ES1ReferenceRepresentation;
 
   static ES1Reference(representation: ES1ReferenceRepresentation): ES1Reference {
     return new ES1Reference(representation);

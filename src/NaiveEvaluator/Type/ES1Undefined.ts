@@ -8,7 +8,7 @@ import { ES1String } from './ES1String';
 import { ES1Object } from './ES1Object';
 
 export class ES1Undefined extends ES1Value {
-  protected representation!: undefined;
+  declare protected representation: undefined;
 
   static ES1Undefined(): ES1Undefined {
     return new ES1Undefined(undefined);

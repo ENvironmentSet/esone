@@ -8,7 +8,7 @@ import { ES1String } from './ES1String';
 import { ES1Object } from './ES1Object';
 
 export class ES1Null extends ES1Value {
-  protected representation!: null;
+  declare protected representation: null;
 
   static ES1Null(): ES1Null {
     return new ES1Null(null);

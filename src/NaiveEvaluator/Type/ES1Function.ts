@@ -42,7 +42,7 @@ export class ES1FunctionRepresentation extends ES1ObjectRepresentation {
 }
 
 export class ES1Function extends ES1Object {
-  protected representation!: ES1FunctionRepresentation;
+  declare protected representation: ES1FunctionRepresentation;
 
   static ES1Function(functionRepresentation: ES1FunctionRepresentation): Runtime<ES1Object>{
     return context => context.introduceObject(new ES1Function(functionRepresentation));

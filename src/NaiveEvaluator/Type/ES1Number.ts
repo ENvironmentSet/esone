@@ -7,7 +7,7 @@ import { ES1String } from './ES1String';
 import { ES1Object } from './ES1Object';
 
 export class ES1Number extends ES1Value {
-  protected representation!: number;
+  declare protected representation: number;
 
   static ES1Number(literal: number): ES1Number {
     return new ES1Number(literal);
