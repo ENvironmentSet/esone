@@ -4,7 +4,6 @@
   "description": "esone is a implementation of ECMAScript 1",
   "private": true,
   "index": "dist/index.js",
-  "types": "dist/types/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "jest"
