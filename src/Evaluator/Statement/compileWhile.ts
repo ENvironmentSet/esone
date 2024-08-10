@@ -1,22 +1,23 @@
 import While from '../../Parser/AST/Statement/While';
-import { isNone, Option } from 'fp-ts/Option';
+import { Option } from 'fp-ts/Option';
 import { ES1Value } from '../Type/ES1Value';
-import { Runtime, extend, error } from '../Runtime/Runtime';
+import { Runtime, empty } from '../Runtime/Runtime';
 import { compileExpression } from '../Expression/compileExpression';
 import { compileStatement } from './compileStatement';
+import { extendWithValue } from '../Runtime/extendWithValue';
+import { ES1Boolean } from '../Type/ES1Boolean';
+import { compose } from '../Runtime/compose';
 
 export const compileWhile: (whileStatement: While, escape: (result: Option<ES1Value>) => Runtime<ES1Value>) => Runtime<ES1Value>
-  = (whileStatement, escape) => extend(
+  = (whileStatement, escape) => extendWithValue(
     compileExpression(whileStatement.condition),
-    cond => isNone(cond)
-      ? error('condition was not evaluated to value')
-      : extend(
-        cond.value.toBoolean(),
-        cond => isNone(cond)
-          ? error('condition was not evaluated to boolean')
-          : extend(
+    cond => extendWithValue(
+      cond.toBoolean(),
+      cond => ES1Value.equals(cond, ES1Boolean.ES1True())
+        ? compose(
             compileStatement(whileStatement.body, escape),
-            () => compileWhile(whileStatement, escape)
+            compileWhile(whileStatement, escape)
           )
-      )
+        : empty()
+    )
 );
