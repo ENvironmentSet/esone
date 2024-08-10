@@ -1,4 +1,4 @@
-import AST from '../../Parser/AST';
+import AST, { While } from '../../Parser/AST';
 import { Option } from 'fp-ts/Option';
 import { Runtime } from '../Runtime/Runtime';
 import { ES1Value } from '../Type/ES1Value';
@@ -10,6 +10,7 @@ import { compileReturn } from './compileReturn';
 import { compileVariable } from './compileVariable';
 import { compileExpression } from './compileExpression';
 import { compileIf } from './compileIf'
+import { compileWhile } from './compileWhile'
 
 export const compileStatement: (ast: AST, escape: (result: Option<ES1Value>) => Runtime<ES1Value>) => Runtime<ES1Value>
   = (ast, escape) => match<Empty, ES1Value>(
@@ -27,7 +28,11 @@ export const compileStatement: (ast: AST, escape: (result: Option<ES1Value>) => 
           match<If, ES1Value>(
             'If',
             ifStatement => compileIf(ifStatement, escape),
-            ast => compileExpression(ast, escape)
+            match<While, ES1Value>(
+              'While',
+              whileStatement => compileWhile(whileStatement, escape),
+              ast => compileExpression(ast, escape)
+            )
           )
         )
       )
