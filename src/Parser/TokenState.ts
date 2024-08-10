@@ -1,10 +1,10 @@
 import { Token } from '../Lexer';
 import { URI as optionURI, option, Option, none, getFirstMonoid } from 'fp-ts/lib/Option';
-import { getStateM, StateM1, StateT1 } from 'fp-ts/lib/StateT';
+import { getStateM, StateM1 } from 'fp-ts/lib/StateT';
 import { Monoid } from 'fp-ts/lib/Monoid';
 import { pipe } from 'fp-ts/lib/pipeable';
 
-export type TokenState<A> = StateT1<optionURI, Token[], A>
+export type TokenState<A> = (tokens: Token[]) => Option<[A, Token[]]>
 
 export function getMonoid<A>(): Monoid<TokenState<A>> {
   return {
