@@ -6,6 +6,7 @@ import composeTokenStates from '../../composeTokenStates';
 import { PlusSign, MinusSign } from '../../../Lexer';
 import { reduce, cons } from 'fp-ts/lib/Array';
 import matchTokenFromLeft from '../../matchTokenFromLeft';
+import { of } from 'fp-ts/NonEmptyArray';
 
 type Operation = (base: Additive) => Additive;
 
@@ -19,7 +20,7 @@ const parseOperations: TokenState<Operation[]> = composeTokenStates(
           parseOperations,
           operations => cons(base => addition(base, value), operations)
         ),
-        tokenState.of([base => addition(base, value)])
+        tokenState.of(of(base => addition(base, value)))
       )
     )
   ),
@@ -32,7 +33,7 @@ const parseOperations: TokenState<Operation[]> = composeTokenStates(
           parseOperations,
           operations => cons(base => subtraction(base, value), operations)
         ),
-        tokenState.of([base => subtraction(base, value)])
+        tokenState.of(of(base => subtraction(base, value)))
       )
     )
   ),

@@ -6,6 +6,7 @@ import composeTokenStates from '../../composeTokenStates';
 import { GreaterThan, StrictGreaterThan, LessThan, StrictLessThan } from '../../../Lexer';
 import { reduce, cons } from 'fp-ts/lib/Array';
 import matchTokenFromLeft from '../../matchTokenFromLeft';
+import { of } from 'fp-ts/NonEmptyArray';
 
 type Operation = (base: Relational) => Relational;
 
@@ -19,7 +20,7 @@ const parseOperations: TokenState<Operation[]> = composeTokenStates(
           parseOperations,
           operations => cons(base => greaterThan(base, value), operations)
         ),
-        tokenState.of([base => greaterThan(base, value)])
+        tokenState.of(of(base => greaterThan(base, value)))
       )
     )
   ),
@@ -32,7 +33,7 @@ const parseOperations: TokenState<Operation[]> = composeTokenStates(
           parseOperations,
           operations => cons(base => greaterThanOrEqual(base, value), operations)
         ),
-        tokenState.of([base => greaterThanOrEqual(base, value)])
+        tokenState.of(of(base => greaterThanOrEqual(base, value)))
       )
     )
   ),
@@ -45,7 +46,7 @@ const parseOperations: TokenState<Operation[]> = composeTokenStates(
           parseOperations,
           operations => cons(base => lessThanOrEqual(base, value), operations)
         ),
-        tokenState.of([base => lessThanOrEqual(base, value)])
+        tokenState.of(of(base => lessThanOrEqual(base, value)))
       )
     )
   ),
@@ -58,7 +59,7 @@ const parseOperations: TokenState<Operation[]> = composeTokenStates(
           parseOperations,
           operations => cons(base => lessThan(base, value), operations)
         ),
-        tokenState.of([base => lessThan(base, value)])
+        tokenState.of(of(base => lessThan(base, value)))
       )
     )
   ),

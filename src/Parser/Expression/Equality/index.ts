@@ -6,6 +6,7 @@ import composeTokenStates from '../../composeTokenStates';
 import { AbstractEquality, Inequality } from '../../../Lexer';
 import { reduce, cons } from 'fp-ts/lib/Array';
 import matchTokenFromLeft from '../../matchTokenFromLeft';
+import { of } from 'fp-ts/NonEmptyArray';
 
 type Operation = (base: Equality) => Equality;
 
@@ -19,7 +20,7 @@ const parseOperations: TokenState<Operation[]> = composeTokenStates(
           parseOperations,
           operations => cons(base => equals(base, value), operations)
         ),
-        tokenState.of([base => equals(base, value)])
+        tokenState.of(of(base => equals(base, value)))
       )
     )
   ),
@@ -32,7 +33,7 @@ const parseOperations: TokenState<Operation[]> = composeTokenStates(
           parseOperations,
           operations => cons(base => doesNotEquals(base, value), operations)
         ),
-        tokenState.of([base => doesNotEquals(base, value)])
+        tokenState.of(of(base => doesNotEquals(base, value)))
       )
     )
   ),

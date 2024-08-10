@@ -7,6 +7,7 @@ import parsePrimary from '../Primary';
 import parseExpression from '../parseExpression';
 import composeTokenStates from '../../composeTokenStates';
 import { reduce, cons } from 'fp-ts/lib/Array';
+import { of } from 'fp-ts/NonEmptyArray';
 
 type PropertyName = Expression | Identifier;
 
@@ -22,7 +23,7 @@ const parsePropertyAccess: TokenState<PropertyName[]> = composeTokenStates(
             parsePropertyAccess,
             propertyNames => cons(expression, propertyNames)
           ),
-          tokenState.of([expression])
+          tokenState.of(of(expression))
         )
       )
     )
@@ -36,7 +37,7 @@ const parsePropertyAccess: TokenState<PropertyName[]> = composeTokenStates(
           parsePropertyAccess,
           propertyNames => cons(identifier, propertyNames)
         ),
-        tokenState.of([identifier])
+        tokenState.of(of(identifier))
       )
     )
   ),

@@ -6,6 +6,7 @@ import composeTokenStates from '../../composeTokenStates';
 import { LeftShift, RightShift, UnsignedRightShift } from '../../../Lexer';
 import { reduce, cons } from 'fp-ts/lib/Array';
 import matchTokenFromLeft from '../../matchTokenFromLeft';
+import { of } from 'fp-ts/NonEmptyArray';
 
 type Operation = (base: BitwiseShift) => BitwiseShift;
 
@@ -19,7 +20,7 @@ const parseOperations: TokenState<Operation[]> = composeTokenStates(
           parseOperations,
           operations => cons(base => leftShift(base, value), operations)
         ),
-        tokenState.of([base => leftShift(base, value)])
+        tokenState.of(of(base => leftShift(base, value)))
       )
     )
   ),
@@ -32,7 +33,7 @@ const parseOperations: TokenState<Operation[]> = composeTokenStates(
           parseOperations,
           operations => cons(base => signedRightShift(base, value), operations)
         ),
-        tokenState.of([base => signedRightShift(base, value)])
+        tokenState.of(of(base => signedRightShift(base, value)))
       )
     )
   ),
@@ -45,7 +46,7 @@ const parseOperations: TokenState<Operation[]> = composeTokenStates(
           parseOperations,
           operations => cons(base => unsignedRightShift(base, value), operations)
         ),
-        tokenState.of([base => unsignedRightShift(base, value)])
+        tokenState.of(of(base => unsignedRightShift(base, value)))
       )
     )
   ),

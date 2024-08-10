@@ -6,6 +6,7 @@ import composeTokenStates from '../../composeTokenStates';
 import { DivisionSign, MultiplicationSign, Remainder } from '../../../Lexer';
 import { reduce, cons } from 'fp-ts/lib/Array';
 import matchTokenFromLeft from '../../matchTokenFromLeft';
+import { of } from 'fp-ts/NonEmptyArray';
 
 type Operation = (base: Multiplicative) => Multiplicative;
 
@@ -19,7 +20,7 @@ const parseOperations: TokenState<Operation[]> = composeTokenStates(
           parseOperations,
           operations => cons(base => division(base, value), operations)
         ),
-        tokenState.of([base => division(base, value)])
+        tokenState.of(of(base => division(base, value)))
       )
     )
   ),
@@ -32,7 +33,7 @@ const parseOperations: TokenState<Operation[]> = composeTokenStates(
           parseOperations,
           operations => cons(base => multiplication(base, value), operations)
         ),
-        tokenState.of([base => multiplication(base, value)])
+        tokenState.of(of(base => multiplication(base, value)))
       )
     )
   ),
@@ -45,7 +46,7 @@ const parseOperations: TokenState<Operation[]> = composeTokenStates(
           parseOperations,
           operations => cons(base => remainder(base, value), operations)
         ),
-        tokenState.of([base => remainder(base, value)])
+        tokenState.of(of(base => remainder(base, value)))
       )
     )
   ),
