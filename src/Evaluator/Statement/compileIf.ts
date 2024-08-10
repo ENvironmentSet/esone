@@ -1,10 +1,10 @@
-import { If } from '../../Parser/AST/Statement/If'
-import { isNone, Option } from 'fp-ts/Option'
-import { ES1Value } from '../Type/ES1Value'
-import { Runtime, extend, error, empty } from '../Runtime/Runtime'
-import { compileExpression } from '../Expression/compileExpression'
-import { ES1Boolean } from '../Type/ES1Boolean'
-import { compileStatement } from './compileStatement'
+import { If } from '../../Parser/AST/Statement/If';
+import { isNone, Option } from 'fp-ts/Option';
+import { ES1Value } from '../Type/ES1Value';
+import { Runtime, extend, error, empty } from '../Runtime/Runtime';
+import { compileExpression } from '../Expression/compileExpression';
+import { ES1Boolean } from '../Type/ES1Boolean';
+import { compileStatement } from './compileStatement';
 
 export const compileIf: (ifStatement: If, escape: (result: Option<ES1Value>) => Runtime<ES1Value>) => Runtime<ES1Value>
   = (ifStatement, escape) => extend(
@@ -21,4 +21,4 @@ export const compileIf: (ifStatement: If, escape: (result: Option<ES1Value>) => 
               ? compileStatement(ifStatement.elseClause, escape)
               : empty()
       )
-)
+);
