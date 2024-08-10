@@ -1,28 +1,35 @@
 {
-  "name": "acropolis",
+  "name": "esone",
   "version": "0.0.0",
-  "description": "Acropolis, where you can experience very first version of ECMAScript.",
+  "description": "esone is a implementation of ECMAScript 1",
   "private": true,
+  "index": "dist/index.js",
+  "types": "dist/types/index.d.ts",
   "scripts": {
-    "bootstrap": "lerna bootstrap",
-    "build": "lerna run build --stream",
-    "test": "lerna run test --stream"
+    "build": "tsc",
+    "test": "jest"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ENvironmentSet/Acropolis.git"
+  "dependencies": {
+    "fp-ts": "^2.8.2"
   },
-  "author": "ENvironmentSet <herryseo1@gmail.com> (https://github.com/ENvironmentSet)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ENvironmentSet/Acropolis/issues"
-  },
-  "homepage": "https://github.com/ENvironmentSet/Acropolis#readme",
   "devDependencies": {
     "@types/jest": "^24.0.18",
     "jest": "^24.9.0",
-    "lerna": "^3.16.4",
     "ts-jest": "^24.1.0",
     "typescript": "3.4.x"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ENvironmentSet/esone.git"
+  },
+  "keywords": [
+    "es1",
+    "ecmascript1"
+  ],
+  "author": "ENvironmentSet <herryseo1@gmail.com> (https://github.com/ENvironmentSet)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ENvironmentSet/esone/issues"
+  },
+  "homepage": "https://github.com/ENvironmentSet/esone#readme"
 }

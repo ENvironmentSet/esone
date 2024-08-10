@@ -7,18 +7,24 @@ import { identity, pipe } from 'fp-ts/function';
 import { snd } from 'fp-ts/Tuple';
 
 describe('Tests for Compiler', () => {
-  test('Should compile well sample source', () => {
+  test('Should compile sample source', () => {
     const sampleSource: string = `
-      var counter = 0;
+      var count = 0;
       
-      function inc(x) {
-        var inner = x - 5;
-        counter = counter + x;
-      
-        return x + inner;
+      function update(x) {
+        count = count + x;
+        
+        return x + x;
       }
       
-      inc(inc(10));
+      update(10);
+      update(100);
+      
+      function call(f, x) {
+        f(x);
+      }
+      
+      call(update, 1);
     `;
 
     const compileResult = pipe(
