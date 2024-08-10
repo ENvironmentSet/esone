@@ -35,7 +35,10 @@ export class ES1FunctionRepresentation extends ES1ObjectRepresentation {
             formalParameters.reduce((prev, bindingId, i) => compose(prev, bind<ES1Value>(argsAsArray[i] ? argsAsArray[i] : ES1Undefined.ES1Undefined(), bindingId)), empty<ES1Value>()),
             compose(
               bind(thisValue, 'this'),
-              compileStatement(body, escape)
+              extend(
+                compileStatement(body, escape),
+                result => intro<ES1Value>(fold<ES1Value, ES1Value>(constant(ES1Undefined.ES1Undefined()), identity)(result))
+              )
             )
           )
         }
