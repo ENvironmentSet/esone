@@ -50,3 +50,4 @@ npm run build && npm run interpret [source file]
 - Declaration
  [x] Function Declaration
 [ ] Standard Library
+[ ] Automatic semicolon insertion
