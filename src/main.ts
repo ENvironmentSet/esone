@@ -21,6 +21,7 @@ import { ES1String } from './Evaluator/Type/ES1String'
 
   const sourceFile = await open(sourceFilePath);
   const code = await sourceFile.readFile({ encoding: 'utf-8' });
+  await sourceFile.close();
 
   console.log(
     pipe(
