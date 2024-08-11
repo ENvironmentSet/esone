@@ -49,5 +49,6 @@ npm run build && npm run interpret [source file]
   + [ ] With statement
 - Declaration
  [x] Function Declaration
+[ ] Comment
 [ ] Standard Library
 [ ] Automatic semicolon insertion
