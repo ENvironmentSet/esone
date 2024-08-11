@@ -27,4 +27,16 @@ export class ES1Number extends ES1Value {
   public sub(x: ES1Number) {
     return this.representation - x.representation;
   }
+
+  public mul(x: ES1Number) {
+    return this.representation * x.representation;
+  }
+
+  public div(x: ES1Number) {
+    return this.representation / x.representation;
+  }
+
+  public rem(x: ES1Number) {
+    return this.representation % x.representation;
+  }
 }

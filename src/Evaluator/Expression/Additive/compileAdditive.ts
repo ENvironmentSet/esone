@@ -1,5 +1,4 @@
 import { match } from '../../Runtime/match';
-import { compileLeftHandSide } from '../LeftHandSide/compileLeftHandSide';
 import { extendWithValue } from '../../Runtime/extendWithValue';
 import { intro } from '../../Runtime/intro';
 import { ES1Number } from '../../Type/ES1Number';
@@ -8,6 +7,7 @@ import { ES1Value } from '../../Type/ES1Value';
 import { AST } from '../../../Parser/AST';
 import { Runtime } from '../../Runtime/Runtime';
 import { getValue } from '../../Runtime/getValue';
+import { compileMultiplicative } from '../Multiplicative/compileMultiplicative';
 
 export const compileAdditive: (ast: AST) => Runtime<ES1Value> = match<Addition, ES1Value>(
   'Addition',
@@ -51,6 +51,6 @@ export const compileAdditive: (ast: AST) => Runtime<ES1Value> = match<Addition, 
         )
       )
     ),
-    compileLeftHandSide
+    compileMultiplicative
   )
 );
