@@ -13,8 +13,8 @@ import { intro } from './Evaluator/Runtime/intro';
 import { extendWithValue } from './Evaluator/Runtime/extendWithValue';
 import { compose } from './Evaluator/Runtime/compose';
 import { map } from './Evaluator/Runtime/map';
-import { ES1Value } from './Evaluator/Type/ES1Value'
-import { ES1String } from './Evaluator/Type/ES1String'
+import { ES1Value } from './Evaluator/Type/ES1Value';
+import { ES1String } from './Evaluator/Type/ES1String';
 
 (async () => {
   const sourceFilePath = process.argv[2];
