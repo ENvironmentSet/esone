@@ -128,4 +128,8 @@ export class ES1Object extends ES1Value {
   public construct(args: ES1List, thisValue: ES1Value): Option<Runtime<ES1Value>> {
     return map((f: (args: ES1List, thisValue: ES1Value) => Runtime<ES1Value>) => f(args, thisValue))(this.representation.Construct);
   }
+
+  public equals(o: ES1Object): boolean {
+    return this.id === o.id;
+  }
 }

@@ -39,4 +39,8 @@ export class ES1Number extends ES1Value {
   public rem(x: ES1Number) {
     return this.representation % x.representation;
   }
+
+  public isNaN(): boolean {
+    return Number.isNaN(this.representation);
+  }
 }
