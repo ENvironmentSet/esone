@@ -13,7 +13,7 @@ npm run build && npm run interpret [source file]
 ## Implementation status
 
 - Expression
-  + [x] Literals
+  + [x] Literals (except single quote string literal)
   + [x] Identifier reference
   + [x] `this` reference
   + [x] Grouping operator
