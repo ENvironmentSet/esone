@@ -5,7 +5,7 @@ import { map as optionMap, chain } from 'fp-ts/Option';
 import { parse } from './Parser';
 import { compile } from './Evaluator/compile';
 import { Context } from './Evaluator/Runtime/Context';
-import { isLeft } from 'fp-ts/Either';
+import { fold } from 'fp-ts/Either';
 import { run, bind } from './Evaluator/Runtime/Runtime';
 import { ES1Function, ES1FunctionExoticRepresentation } from './Evaluator/Type/ES1Function';
 import { ES1Undefined } from './Evaluator/Type/ES1Undefined';
@@ -15,46 +15,43 @@ import { compose } from './Evaluator/Runtime/compose';
 import { map } from './Evaluator/Runtime/map';
 import { ES1Value } from './Evaluator/Type/ES1Value';
 import { ES1String } from './Evaluator/Type/ES1String';
+import * as TO from 'fp-ts/TaskOption';
+import { constant } from 'fp-ts/lib/function'
 
-(async () => {
-  const sourceFilePath = process.argv[2];
+pipe(
+  TO.Do,
+  TO.bind('sourceFilePath', () => TO.fromNullable(process.argv[2])),
+  TO.bind('sourceFile', ({ sourceFilePath }) => TO.tryCatch(() => open(sourceFilePath))),
+  TO.bind('code', ({ sourceFile }) => TO.tryCatch(() => sourceFile.readFile({ encoding: 'utf-8' }))),
+  TO.tap(({ sourceFile }) => TO.tryCatch(() => sourceFile.close())),
+  TO.chain(({ code }) => pipe(
+    tokenize(code),
+    chain(parse),
+    optionMap(compile),
+    optionMap(program => run(
+      Context.createContext(),
+      extendWithValue(
+        ES1Function.ES1Function(
+          new ES1FunctionExoticRepresentation(
+            'print',
+            args => {
+              for (const arg of args)
+                return map<ES1String, ES1Value>(
+                  str => {
+                    console.log(str);
 
-  const sourceFile = await open(sourceFilePath);
-  const code = await sourceFile.readFile({ encoding: 'utf-8' });
-  await sourceFile.close();
-
-  console.log(
-    pipe(
-      tokenize(code),
-      chain(parse),
-      optionMap(compile),
-      optionMap(program => run(
-          Context.createContext(),
-          extendWithValue(
-            ES1Function.ES1Function(
-              new ES1FunctionExoticRepresentation(
-                'print',
-                args => {
-                  for (const arg of args)
-                    return map<ES1String, ES1Value>(
-                      str => {
-                        console.log(str);
-
-                        return ES1Undefined.ES1Undefined();
-                      }
-                    )(arg.toString());
-                  return intro(ES1Undefined.ES1Undefined());
-                }
-              )
-            ),
-            print => compose(bind(print, 'print'), program)
+                    return ES1Undefined.ES1Undefined();
+                  }
+                )(arg.toString());
+              return intro(ES1Undefined.ES1Undefined());
+            }
           )
-        )
-      ),
-      optionMap(result => {
-        if (isLeft(result)) return `Error occurred: ${result.left.message}`
-        else return 'program finished.'
-      })
-    )
-  );
-})()
+        ),
+        print => compose(bind(print, 'print'), program)
+      )
+    )),
+    optionMap(fold(e => `An error occurred: ${e.message}`, constant('program finished.'))),
+    TO.fromOption
+  )),
+  TO.tap(output => TO.fromIO(() => console.log(output)))
+)();
