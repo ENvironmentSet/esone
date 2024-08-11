@@ -4,6 +4,12 @@ esone is ECMAScript 1 implementation built with typescript & functional programm
 
 You can find specification of ECMAScript 1 in [here](https://ecma-international.org/wp-content/uploads/ECMA-262_1st_edition_june_1997.pdf).
 
+## Usage
+
+```
+npm run build && npm run interpret [source file]
+```
+
 ## Implementation status
 
 - Expression
