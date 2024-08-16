@@ -1,5 +1,5 @@
-export function nameFunction<F extends (...args: any[]) => any>(name: string, f: F): F {
-  const { [name]: derived } = { [name]: (...args: Parameters<F>): ReturnType<F> => f(...args) };
+export function nameFunction<P extends unknown[], R>(name: string, f: (...args: P) => R): (...args: P) => R {
+  const { [name]: derived } = { [name]: (...args: P): R => f(...args) };
 
-  return derived as F;
+  return derived;
 }
