@@ -1,6 +1,6 @@
 import { ES1Value } from './ES1Value';
 import { ES1String } from './ES1String';
-import { Option, none, isSome, fold, map, getOrElse } from 'fp-ts/Option';
+import { Option, none, isSome, fold, map, getOrElse, some } from 'fp-ts/Option';
 import { error, Runtime } from '../Runtime/Runtime';
 import { Immutable } from '../../utils/Immutable/Immutable';
 import { ObjectId } from '../Runtime/Context';
@@ -13,7 +13,6 @@ import { intro } from '../Runtime/intro';
 import { ES1Boolean } from './ES1Boolean';
 import { ES1Number } from './ES1Number';
 import { ES1List } from './ES1List';
-import { some } from 'fp-ts/lib/Option'
 
 export class ES1PropertyRepresentation extends Immutable {
   constructor(
