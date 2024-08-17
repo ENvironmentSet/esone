@@ -13,6 +13,7 @@ import { intro } from '../Runtime/intro';
 import { ES1Boolean } from './ES1Boolean';
 import { ES1Number } from './ES1Number';
 import { ES1List } from './ES1List';
+import { some } from 'fp-ts/lib/Option'
 
 export class ES1PropertyRepresentation extends Immutable {
   constructor(
@@ -39,7 +40,7 @@ export class ES1ObjectRepresentation extends Immutable {
 
 export class ES1Object extends ES1Value {
   declare public representation: ES1ObjectRepresentation;
-  protected id: Option<ObjectId> = none;
+  public id: Option<ObjectId> = none;
 
   static ES1Object(objectDescriptor: ES1ObjectRepresentation): Runtime<ES1Object> {
     return context => context.introduceObject(new ES1Object(objectDescriptor));
@@ -54,7 +55,7 @@ export class ES1Object extends ES1Value {
   }
 
   public setId(id: ObjectId): ES1Object {
-    return this.update({ id });
+    return this.update({ id: some(id) });
   }
 
   public has(propertyName: ES1String): boolean {
