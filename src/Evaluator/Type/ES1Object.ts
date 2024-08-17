@@ -38,7 +38,7 @@ export class ES1ObjectRepresentation extends Immutable {
 }
 
 export class ES1Object extends ES1Value {
-  declare protected representation: ES1ObjectRepresentation;
+  declare public representation: ES1ObjectRepresentation;
   protected id: Option<ObjectId> = none;
 
   static ES1Object(objectDescriptor: ES1ObjectRepresentation): Runtime<ES1Object> {
@@ -104,7 +104,7 @@ export class ES1Object extends ES1Value {
     return pipe(
       this.getPropertyReps(propertyName),
       map(propertyReps => propertyReps.deletable ? deleteAt(ES1String.eq)(propertyName)(this.representation.properties) : this.representation.properties),
-      map(properties => this.update({ properties })),
+      map(properties => this.update({ representation: this.representation.update({ properties }) })),
       fold(constant([true, this]), self => [!self.has(propertyName), self])
     )
   }
