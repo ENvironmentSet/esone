@@ -38,7 +38,7 @@ export class ES1ObjectRepresentation extends Immutable {
 }
 
 export class ES1Object extends ES1Value {
-  declare public representation: ES1ObjectRepresentation;
+  declare protected representation: ES1ObjectRepresentation;
   public id: Option<ObjectId> = none;
 
   static ES1Object(objectDescriptor: ES1ObjectRepresentation): Runtime<ES1Object> {
